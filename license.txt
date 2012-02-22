@@ -1,0 +1,8 @@
+/*!
+* Maracuja v@VERSION
+* http://www.studsmedia.se
+* 
+* Copyright @YEAR, Robert "Legogris" Edstrom
+* Licensed under MIT license
+* Date: @DATE
+*/
