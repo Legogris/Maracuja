@@ -1,15 +1,20 @@
 SRC_DIR = src
 TEST_DIR = test
 BUILD_DIR = build
+LIB_DIR = lib
 
 PREFIX = .
-OUT_DIR = ${PREFIX}/out
+OUT_DIR = ..
 
-BASE_FILES = ${SRC_DIR}/core.js
+BASE_FILES = ${SRC_DIR}/core.js\
+	${SRC_DIR}/gfx.js\
+	${SRC_DIR}/canvas.js
 
 MODULES = license.txt\
 	${SRC_DIR}/prologue.js\
 	${BASE_FILES}\
+	${SRC_DIR}/selector.js\
+	${SRC_DIR}/exports.js\
 	${SRC_DIR}/epilogue.js
 
 VERSION = $(shell cat version.txt)
@@ -34,6 +39,10 @@ ${MC}: ${MODULES} | ${OUT_DIR}
 		sed 's/@VERSION/'"${VERSION}"'/' \
 		> ${MC};
 
+${SRC_DIR}/selector.js: ${LIB_DIR}/sizzle/sizzle.js
+	@@echo "Building selector code from Sizzle"
+	@@sed '/EXPOSE/r src/sizzle-maracuja.js' ${LIB_DIR}/sizzle/sizzle.js | grep -v window.Sizzle > ${SRC_DIR}/selector.js
+
 clean:
-	@@echo "Removing out directory: " ${OUT_DIR}
-	@@rm -rf ${OUT_DIR}
+	@@echo "Removing out file: " ${MC}
+	@@rm ${MC}
