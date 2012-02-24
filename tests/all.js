@@ -1,5 +1,5 @@
 try {
-	define(['maracuja/tests/functions/gfx'], function(core, gfx) {
+	define(['maracuja/tests/functions/gfx'], function(gfx) {
 	});
 }catch(e){
      doh.debug(e);

@@ -12,6 +12,7 @@ var Maracuja = function() {
 			frameCount: 0,
 			elapsed: 0
 	};
+	var runUpdate;
 	
 	//PRIVATE FUNCTIONS
 	var initTimer = function() {
@@ -21,7 +22,6 @@ var Maracuja = function() {
 			frameCount: 0,
 			elapsed: 0
 		};
-		window.requestAnimationFrame(update, Gfx.scene);
 	}
 	
 	//FUNCTIONS
@@ -34,11 +34,10 @@ var Maracuja = function() {
 	**/
 	var init = function(sceneID) {
 		var result = true;
-		if(Gfx.init(sceneID)) {
-			initTimer();
-		} else {
+		if(!Gfx.init(sceneID)) {
 			result = false;
 		}
+		initTimer();
 		return result;
 	};
 	
@@ -58,18 +57,45 @@ var Maracuja = function() {
 	* #Maracuja.update
 	* @category Core
 	* @sign public void Maracuja.update(int timeStamp)
-	* @param timeStamp elapsed milliseconds since epoch
-	* Update method that gets called each frame by requestAnimationFrame-
+	* @param timeStamp elapsed milliseconds since epoch. Uses Date.now() if omitted. optional
+	* Update method that gets called each frame.
+	* Can also be called manually.
 	**/
 	var update = function(timeStamp) {
-		window.requestAnimationFrame(update, Gfx.scene);
+		if(runUpdate) {
+			window.requestAnimationFrame(update, Gfx.scene);
+		}
+		if(typeof timeStamp === 'undefined') {
+			timeStamp = Date.now();
+		}
 		var delta = timeStamp - gameTime.start - gameTime.elapsedTotal;
 		gameTime.elapsedTotal += delta;
 		gameTime.elapsed = delta;
 		gameTime.frameCount++;
 		Gfx.update(gameTime);
 	}
-	
+
+	/**@
+	* #Maracuja.startUpdating
+	* @category Core
+	* @sign public void Maracuja.startUpdating()
+	* Starts automatic engine, basically calling update() each frame.
+	**/
+	var startUpdating = function() {
+		runUpdate = true;
+		window.requestAnimationFrame(update, Gfx.scene);
+	};
+
+	/**@
+	* #Maracuja.stopUpdating
+	* @category Core
+	* @sign public void Maracuja.stopUpdating()
+	* Stops automatic updating.
+	**/
+	var stopUpdating = function() {
+		runUpdate = false;
+	};
+
 	/**@
 	* #Maracuja.getFPS
 	* @category Core, Timing
@@ -90,6 +116,9 @@ var Maracuja = function() {
 		component: component,
 		e: entity,
 		entity: entity,
+		update: update,
+		startUpdating: startUpdating,
+		stopUpdating: stopUpdating,
 		getFPS: getFPS
 	};
 }();

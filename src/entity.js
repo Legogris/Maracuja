@@ -7,7 +7,7 @@ var Entity = function() {
 	var implement = function(c) {
 		console.log('implement', this);
 		var pieces;
-		if(Object.prototype.toString.apply(c) === '[objectArray]') {
+		if(Object.prototype.toString.apply(c) === '[object Array]') {
 			pieces = c;
 		} else {
 			pieces = c.split(' ');
