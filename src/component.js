@@ -1,4 +1,5 @@
-var Component = function(_id, attrs, ancestorIDs) {
+var Component = function(MC) {
+return function(_id, attrs, ancestorIDs) {
 	var id = _id;	
 	var ancestors = [];
 
@@ -13,11 +14,12 @@ var Component = function(_id, attrs, ancestorIDs) {
 
 	if(ancestorIDs !== undefined) {
 		if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
-			ancestorIDs = c.split(' ');
+			ancestorIDs = ancestorIDs.split(' ');
 		}
 		for(var id in ancestorIDs) {
-			var ancestor = MC.getComponent(ancestors);
-			ancestors.push(ancestor);
+			var ancestor = MC.getComponent(ancestorIDs[id]);
+			console.log(id, ancestor);
+			ancestors.push(ancestorIDs[id]);
 			/*for(var key in ancestor.attrs) {
 				this[key] = ancestor.attrs[key];
 			}*/
@@ -25,3 +27,4 @@ var Component = function(_id, attrs, ancestorIDs) {
 
 	}
 };
+}(Maracuja);

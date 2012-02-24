@@ -9,8 +9,10 @@ OUT_DIR = ..
 BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/entity.js\
 	${SRC_DIR}/component.js\
+	${SRC_DIR}/components.js\
 	${SRC_DIR}/gfx.js\
-	${SRC_DIR}/canvas.js
+	${SRC_DIR}/canvas.js\
+	${SRC_DIR}/helpers.js
 
 MODULES = license.txt\
 	${SRC_DIR}/prologue.js\
@@ -22,7 +24,7 @@ MODULES = license.txt\
 	${SRC_DIR}/epilogue.js
 
 VERSION = $(shell cat version.txt)
-DATE = $(shell git log -1 --pretty=format:%ai)
+DATE = $(shesll git log -1 --pretty=format:%ai)
 YEAR = $(shell date +%Y)
 MC = ${OUT_DIR}/maracuja.js
 

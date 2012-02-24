@@ -1,4 +1,6 @@
-var Entity = function(c) {
+
+var Entity = function(MC) {
+return function(c) {
 	//Private variables
 	var components = {};
 
@@ -9,9 +11,9 @@ var Entity = function(c) {
 			pieces = c;
 		} else {
 			pieces = c.split(' ');
-			com = MC.getComponent(pieces[0]);
 		}
-		
+		com = MC.getComponent(pieces[0]);
+
 		if(pieces.length > 1) {
 			for(var i = 0, len = pieces.length; i < len; i++) {
 				com = MC.getComponent(pieces[i]);
@@ -29,20 +31,22 @@ var Entity = function(c) {
 				implement(c.ancestors);
 			}
 			var attrs = c.attrs;
-			for(var key in attrs) {
-				this[key] = attrs[key];
+			if(attrs !== undefined) {
+				for(var key in attrs) {
+					this[key] = attrs[key];
+				}
+				if(attrs.init !== undefined) {
+					attrs.init();
+					this.init = undefined;
+				}
 			}
-			if(attrs.init !== undefined) {
-				attrs.init();
-			}
-			attrs.init = undefined;
 		}
 		return this;
 	};
 
 	var removeComponent = function(c) {
 		if(c && has(c)) {
-
+//TODO
 		}
 	};
 	
@@ -56,3 +60,4 @@ var Entity = function(c) {
 	this.implement(c);
 	return this;
 };
+}(Maracuja);
