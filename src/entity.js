@@ -3,7 +3,6 @@ var Entity = function(c) {
 	var components = {};
 
 	var implement = function(c) {
-		console.log('implement', c);
 		var pieces;
 		var com;
 		if(Object.prototype.toString.apply(c) === '[object Array]') {
@@ -24,16 +23,27 @@ var Entity = function(c) {
 	};
 	
 	var addComponent = function(c) {
-		if(c) {
-			console.log('addComponent', c);
-			if(!has(c)) {
-				components[c.getID()] = c;
-				if(c.ancestors.length > 0) {
-					implement(c.ancestors);
-				}
+		if(c && !has(c)) {
+			components[c.getID()] = c;
+			if(c.ancestors.length > 0) {
+				implement(c.ancestors);
 			}
+			var attrs = c.attrs;
+			for(var key in attrs) {
+				this[key] = attrs[key];
+			}
+			if(attrs.init !== undefined) {
+				attrs.init();
+			}
+			attrs.init = undefined;
 		}
 		return this;
+	};
+
+	var removeComponent = function(c) {
+		if(c && has(c)) {
+
+		}
 	};
 	
 	var has = function(c) {

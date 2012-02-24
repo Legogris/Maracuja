@@ -1,4 +1,4 @@
-var Component = function(_id, attrs, ancestors) {
+var Component = function(_id, attrs, ancestorIDs) {
 	var id = _id;	
 	var ancestors = [];
 
@@ -7,19 +7,21 @@ var Component = function(_id, attrs, ancestors) {
 	};
 
 	//CONSTRUCTOR
-	this.ancestors = ancestors;
 	this.getID = getID;
+	this.ancestors = ancestors;
+	this.attrs = attrs;
 
-	if(ancestors !== undefined) {
-		for(var id in ancestors) {
-			var ancestor = ancestors[id];
-			this.ancestors.push(ancestor);
-			for(var key in ancestor.attrs) {
-				this[key] = ancestor.attrs[key];
-			}
+	if(ancestorIDs !== undefined) {
+		if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
+			ancestorIDs = c.split(' ');
 		}
-	}
-	for(var key in attrs) {
-		this[key] = attrs[key];
+		for(var id in ancestorIDs) {
+			var ancestor = MC.getComponent(ancestors);
+			ancestors.push(ancestor);
+			/*for(var key in ancestor.attrs) {
+				this[key] = ancestor.attrs[key];
+			}*/
+		}
+
 	}
 };
