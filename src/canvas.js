@@ -1,6 +1,9 @@
 /* Maracuja.Gfx.Canvas */
 var Canvas = function(MC) {
 	var Gfx = MC.Gfx;
+	var gameTime = undefined;
+	var entities = [];
+	var changed;
 	
 	/**@
 	* #Maracuja.Gfx.Canvas.init
@@ -28,8 +31,15 @@ var Canvas = function(MC) {
 		}
 		this.canvas = canvas;
 		this.context = ctx;
+		this.inUse = true;
+		changed = true;
 		return true;
 	};
+	
+	var update = function(_gameTime) {
+		console.log("Canvas update not implemented");
+	}
+	
 	/**@
 	* #Maracuja.Gfx.Canvas.background
 	* @category Gfx, Canvas
@@ -43,13 +53,16 @@ var Canvas = function(MC) {
 			this.canvas.style.background = value;
 		}
 		return this.canvas.style.backgroundColor;
-	}
+	};
+	
 	/* PUBLIC */
 	return MC.Gfx.Canvas = {
 		context: undefined,
 		canvas: undefined,
+		inUse: false,
 		
 		init: init,
+		update: update,
 		background: background
 	};
 }(Maracuja);

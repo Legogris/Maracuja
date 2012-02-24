@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Maracuja Feature tester</title>
+	<script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
+		data-dojo-config="isDebug: true"></script>
+	<script type="text/javascript">
+dojo.registerModulePath('maracuja', '../../lego/maracuja');
+require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
+	doh.register('canvasInit', [
+		{
+			name: 'Canvas init',
+			runTest: function(t) {
+				MC.init('scene');
+				var result = MC.Gfx.Canvas.init();
+				return result;
+			}
+		}
+	]);
+	doh.registerGroup('canvas', [
+			{
+				name: 'background',
+				runTest: function(t) {
+					var color = 'rgb(204, 0, 34)';
+					MC.Gfx.Canvas.background(color);
+					doh.is(color, MC.Gfx.Canvas.background());
+				}
+			}
+		],
+		function() { //setUp
+			MC.init('scene');
+			MC.Gfx.Canvas.init();
+		},
+		function() { //tearDown
+		}
+	);
+	doh.run();
+});
+	</script>
+  </head>
+  <body>
+	<div id="scene" style="width: 600px; height: 400px;"></div>
+  </body>
+</html>

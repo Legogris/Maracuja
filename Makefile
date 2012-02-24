@@ -7,12 +7,16 @@ PREFIX = .
 OUT_DIR = ..
 
 BASE_FILES = ${SRC_DIR}/core.js\
+	${SRC_DIR}/entity.js\
+	${SRC_DIR}/component.js\
 	${SRC_DIR}/gfx.js\
 	${SRC_DIR}/canvas.js
 
 MODULES = license.txt\
 	${SRC_DIR}/prologue.js\
+	${SRC_DIR}/class.js\
 	${BASE_FILES}\
+	${SRC_DIR}/polyfills.js\
 	${SRC_DIR}/selector.js\
 	${SRC_DIR}/exports.js\
 	${SRC_DIR}/epilogue.js

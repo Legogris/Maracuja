@@ -1,6 +1,8 @@
 /* Maracuja.Gfx */
 var Gfx = function(MC) {
 	var layers = [];
+	var redrawEntities = [];	//DOM Entities that were modified during this frame and need to be redrawn
+	var gameTime = undefined;
 	
 	/**@
 	* #Maracuja.Gfx.init
@@ -48,6 +50,23 @@ var Gfx = function(MC) {
 	};
 	
 	/**@
+	* #Maracuja.Gfx.update
+	* @category Gfx
+	* @sign public void Maracuja.Gfx.update(float gameTime)
+	* @param gameTime Dictionary holding time values
+	* Draw method that gets called each frame to update
+	**/
+	var update = function(_gameTime) {
+		gameTime = _gameTime;
+		for(var i in redrawEntities) {
+			redrawEntities[i].draw();
+		}
+		if(Canvas.inUse) {
+			Canvas.update(gameTime);
+		}
+	}
+	
+	/**@
 	* #Maracuja.Gfx.background
 	* @category Gfx
 	* @sign public String Maracuja.Gfx.background(String value)
@@ -69,7 +88,7 @@ var Gfx = function(MC) {
 		scene: undefined,
 		
 		init: init,
+		update: update,
 		background: background
 	};
-	MC.Gfx = this;
 }(Maracuja);
