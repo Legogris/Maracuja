@@ -5,7 +5,7 @@ var Maracuja = function() {
 	
 	//FIELDS/PROPERTIES
 	var entities = [];
-	var components = [];
+	var components = {};
 	var gameTime = {
 			start: undefined,
 			elapsedTotal: 0,
@@ -53,6 +53,10 @@ var Maracuja = function() {
 		return new Entity(component);
 	};
 	
+	var getComponent = function(id) {
+		return components[id];
+	};
+
 	/**@
 	* #Maracuja.update
 	* @category Core
@@ -116,6 +120,7 @@ var Maracuja = function() {
 		component: component,
 		e: entity,
 		entity: entity,
+		getComponent: getComponent,
 		update: update,
 		startUpdating: startUpdating,
 		stopUpdating: stopUpdating,
