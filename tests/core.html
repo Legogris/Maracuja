@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Maracuja Feature tester</title>
+	<script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
+		data-dojo-config="isDebug: true"></script>
+	<script type="text/javascript">
+dojo.registerModulePath('maracuja', '../../lego/maracuja');
+require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
+	doh.registerGroup('maracuja.tests.core', 
+		[
+			{
+				name: 'MC.init()',
+				timeout: 500,
+				runTest: function() {
+					var result = MC.init('scene');
+					doh.t(result);
+				}
+			},
+			{
+				name: 'MC.c, MC.getComponent, Component.getID',
+				timeout: 500,
+				runTest: function() {
+					var c1 = MC.getComponent('c1');
+					var c2 = MC.getComponent('c2');
+					doh.is(c1.getID(), 'c1');
+				}
+			},
+			{
+				name: 'MC.e',
+				timeout: 500,
+				runTest: function() {
+					var e = MC.e('c2');
+					doh.t(e.has('c1'));
+					doh.t(e.has('c2'));
+					doh.f(e.has('c3'));
+					console.log(e);
+					doh.is(60, e.testVar);
+					doh.is(30, e.baseVar);
+					e.implement('c3');
+					doh.t(e.has('c3'));
+					doh.is(62, e.testVar);
+					doh.is(1, e.baseVar);
+				}
+			}
+
+		], function() {
+			testVar = 0;
+			MC.c('c1', {
+				testVar: 20,
+				baseVar: 30,
+				init: function() {
+				}
+			});
+			MC.c('c2', {
+				init: function() {
+					this.testVar += 40;
+				}
+			}, 'c1');
+			MC.c('c3', {
+				baseVar: 1,
+				init: function() {
+					this.testVar += 2;
+				}
+			}, 'c1');
+		},
+		function() {});
+	doh.run();
+});
+	</script>
+  </head>
+  <body>
+	<div id="scene" style="width: 600px; height: 400px;"></div>
+  </body>
+</html>

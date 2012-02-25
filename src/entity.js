@@ -21,23 +21,23 @@ var Entity = function(MC) {
 				}
 				return self;
 			}
-			return addComponent(com)
+			return addComponent(this, com);
 		};
 		
-		var addComponent = function(c) {
+		var addComponent = function(e, c) {
 			if(c && !has(c.getID())) {
 				components[c.getID()] = c;
 				if(c.ancestors.length > 0) {
-					implement(c.ancestors);
+					e.implement(c.ancestors);
 				}
 				var attrs = c.attrs;
 				if(attrs !== undefined) {
 					for(var key in attrs) {
-						this[key] = attrs[key];
+						e[key] = attrs[key];
 					}
-					if(attrs.init !== undefined) {
-						attrs.init();
-						this.init = undefined;
+					if(e.init !== undefined) {
+						e.init();
+						e.init = undefined;
 					}
 				}
 			}
