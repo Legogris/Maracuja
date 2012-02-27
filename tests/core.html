@@ -5,7 +5,7 @@
 	<script type="text/javascript" src="/dojotoolkit/dojo/dojo.js"
 		data-dojo-config="isDebug: true"></script>
 	<script type="text/javascript">
-dojo.registerModulePath('maracuja', '../../lego/maracuja');
+dojo.registerModulePath('maracuja', '/lego/maracuja');
 require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 	doh.registerGroup('maracuja.tests.core', 
 		[
@@ -42,6 +42,22 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					doh.is(62, e.testVar);
 					doh.is(1, e.baseVar);
 				}
+			},
+			{
+				name: 'Entity.bind, Entity.trigger',
+				timeout: 500,
+				runTest: function() {
+					var e = MC.e('c2');
+					doh.is(0, e.eventVar);
+					e.trigger('onFlip');
+					doh.is(102, e.eventVar);
+					e.implement('c3');
+					e.trigger('onFlip');
+					doh.is(214, e.eventVar);
+					e.bind('onFlip', function(sender, eventArgs)  { sender.eventVar = eventArgs.val;});
+					e.trigger('onFlip', {val: 1337});
+					doh.is(1337, e.eventVar);
+				}
 			}
 
 		], function() {
@@ -49,18 +65,28 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 			MC.c('c1', {
 				testVar: 20,
 				baseVar: 30,
+				eventVar: 0,
 				init: function() {
+				},
+				onFlip: function(sender) {
+					sender.eventVar += 100;
 				}
 			});
 			MC.c('c2', {
 				init: function() {
 					this.testVar += 40;
+				},
+				onFlip: function(sender) {
+					sender.eventVar += 2;
 				}
 			}, 'c1');
 			MC.c('c3', {
 				baseVar: 1,
 				init: function() {
 					this.testVar += 2;
+				},
+				onFlip: function(sender) {
+					sender.eventVar += 10;
 				}
 			}, 'c1');
 		},

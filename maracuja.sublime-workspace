@@ -39,8 +39,8 @@
 			"file": "src/entity.js",
 			"settings":
 			{
-				"buffer_size": 1254,
-				"line_ending": "Unix"
+				"buffer_size": 1252,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -48,7 +48,7 @@
 			"settings":
 			{
 				"buffer_size": 679,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -56,7 +56,7 @@
 			"settings":
 			{
 				"buffer_size": 339,
-				"line_ending": "Unix",
+				"line_ending": "Windows",
 				"name": "function(){"
 			}
 		},
@@ -65,7 +65,7 @@
 			"settings":
 			{
 				"buffer_size": 2774,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -73,7 +73,7 @@
 			"settings":
 			{
 				"buffer_size": 1133,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -81,15 +81,23 @@
 			"settings":
 			{
 				"buffer_size": 19,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		},
 		{
 			"file": "tests/functions/core.js",
 			"settings":
 			{
-				"buffer_size": 730,
-				"line_ending": "Unix"
+				"buffer_size": 137,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "tests/core.html",
+			"settings":
+			{
+				"buffer_size": 1607,
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -161,7 +169,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -169,15 +177,15 @@
 					"file": "src/entity.js",
 					"settings":
 					{
-						"buffer_size": 1254,
+						"buffer_size": 1252,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								489,
-								489
+								458,
+								458
 							]
 						],
 						"settings":
@@ -203,8 +211,8 @@
 						"selection":
 						[
 							[
-								251,
-								251
+								0,
+								0
 							]
 						],
 						"settings":
@@ -230,14 +238,15 @@
 						"selection":
 						[
 							[
-								38,
-								38
+								0,
+								0
 							]
 						],
 						"settings":
 						{
 							"auto_name": "function(){",
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -257,8 +266,8 @@
 						"selection":
 						[
 							[
-								290,
-								290
+								0,
+								0
 							]
 						],
 						"settings":
@@ -267,7 +276,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -284,8 +293,8 @@
 						"selection":
 						[
 							[
-								259,
-								259
+								0,
+								0
 							]
 						],
 						"settings":
@@ -310,8 +319,8 @@
 						"selection":
 						[
 							[
-								19,
-								19
+								0,
+								0
 							]
 						],
 						"settings":
@@ -329,15 +338,15 @@
 					"file": "tests/functions/core.js",
 					"settings":
 					{
-						"buffer_size": 730,
+						"buffer_size": 137,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								401,
-								432
+								0,
+								0
 							]
 						],
 						"settings":
@@ -347,6 +356,33 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "tests/core.html",
+					"settings":
+					{
+						"buffer_size": 1607,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								69,
+								69
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
