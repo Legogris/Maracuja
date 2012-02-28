@@ -40,10 +40,8 @@ var Entity = function(MC) {
 					e.implement(c.ancestors);
 				}
 				e.attach(c.attrs);
-				if(e.init !== undefined) {
-					e.init();
-					e.init = undefined;
-				}
+				e.trigger('init');
+				e.unbind('init');
 				var req = c.requires;
 				if(req) {
 					for(var i = 0, l = req.length; i < l; i++) {
@@ -68,7 +66,7 @@ var Entity = function(MC) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
 					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler
-						this.bind(key, attrs[key]);
+						this.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {
 						this[key] = attrs[key];
@@ -101,6 +99,7 @@ var Entity = function(MC) {
 		* Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
 		**/
 		var bind = function(eventID, handler) {
+			eventID = eventID.toLowerCase();
 			if(typeof handlers[eventID] === 'undefined') {
 				handlers[eventID] = [];
 			}
@@ -114,23 +113,38 @@ var Entity = function(MC) {
 		* @category Core
 		* @sign public void Entity.unbind(eventID, handler)
 		* @param eventID Event to unbind
-		* @param handler Callback to unbind.
+		* @param handler Callback to unbind. optional
 		* Unbinds a previously bound callback from an event, both from current entity and globally.
+		* If handler parameter is not supplied, all attached callbacks to the given event will be unbound.
 		**/
 		var unbind = function(eventID, handler) {
+			eventID = eventID.toLowerCase();
 			var h = handlers[eventID];
 			if(h) {
-				for(var i = 0, l = h.length; i < l; i++) {
-					if(h[i].callback == handler) {
-						h.splice(i, 1);
-						i--;
-						l--;
+				if(typeof handler !== 'undefined') {
+					for(var i = 0, l = h.length; i < l; i++) {
+						if(h[i].callback == handler) {
+							h.splice(i, 1);
+							i--;
+							l--;
+						}
+					}
+					Maracuja.unbind(eventID, handler);
+				} else { //unbind all handlers
+					//Optimize for case when there is only one callback
+					if(h.length === 1) {
+						Maracuja.unbind(eventID, handler);						
+					} else {
+						for(var i = 0, l = h.length; i < l; i++) {
+							Maracuja.unbind(eventID, h[i]);
+						}
+						handlers[eventID] = [];
 					}
 				}
+
 			}
-			Maracuja.unbind(eventID, handler);
 			return this;
-		}
+		};
 
 		/**@
 		* #Entity.trigger
@@ -141,6 +155,7 @@ var Entity = function(MC) {
 		* Triggers an event, firing all bound callbacks.
 		**/
 		var trigger = function(eventID, eventArgs) {
+			eventID = eventID.toLowerCase();
 			var h = handlers[eventID];
 			if(typeof h !== 'undefined' && h.length > 0) {
 				if(h.length === 1) {

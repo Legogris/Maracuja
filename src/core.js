@@ -70,6 +70,7 @@ var Maracuja = function() {
 	* Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
 	**/
 	var bind = function(eventID, handler, owner) {
+		eventID = eventID.toLowerCase();
 		if(typeof handlers[eventID] === 'undefined') {
 			handlers[eventID] = [];
 		}
@@ -85,6 +86,7 @@ var Maracuja = function() {
 	* Unbinds a previously bound callback from a global event.
 	**/
 	var unbind = function(eventID, handler) {
+		eventID = eventID.toLowerCase();
 		var h = handlers[eventID];
 		if(h) {
 			for(var i = 0, l = h.length; i < l; i++) {
@@ -106,6 +108,7 @@ var Maracuja = function() {
 	* Triggers an event, firing all bound callbacks.
 	**/
 	var trigger = function(eventID, eventArgs) {
+		eventID = eventID.toLowerCase();
 		var h = handlers[eventID];
 		if(typeof h !== 'undefined' && h.length > 0) {
 			if(h.length === 1) {

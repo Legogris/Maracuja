@@ -34,7 +34,6 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					doh.t(e.has('c1'));
 					doh.t(e.has('c2'));
 					doh.f(e.has('c3'));
-					console.log(e);
 					doh.is(60, e.testVar);
 					doh.is(30, e.baseVar);
 					e.implement('c3');
@@ -50,31 +49,30 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					var e = MC.e('c2');
 					doh.is(0, e.eventVar);
 
-					e.trigger('onFlip');
+					e.trigger('flip');
 					doh.is(102, e.eventVar);
 
 					e.implement('c3');
-					e.trigger('onFlip');
+					e.trigger('flip');
 					doh.is(214, e.eventVar);
 					
 					var customHandler = function(owner, sender, eventArgs)  { owner.eventVar = eventArgs.val; console.log('custom onFlip');};
-					e.bind('onFlip', customHandler);
-					MC.trigger('onFlip', {val: 1337});
+					e.bind('flip', customHandler);
+					MC.trigger('flip', {val: 1337});
 					doh.is(1337, e.eventVar);
 
-					e.unbind('onFlip', customHandler);
-					MC.trigger('onFlip');
+					e.unbind('flip', customHandler);
+					MC.trigger('flip');
 					doh.is(1449, e.eventVar);
 				}
 			}
-
 		], function() {
 			testVar = 0;
 			MC.c('c1', {
 				testVar: 20,
 				baseVar: 30,
 				eventVar: 0,
-				init: function() {
+				oninit: function() {
 				},
 				onFlip: function(owner, sender) {
 					console.log('c1 onFlip', sender);
@@ -82,8 +80,9 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				}
 			});
 			MC.c('c2', {
-				init: function() {
-					this.testVar += 40;
+				oninit: function(owner) {
+					console.log('c2 init');
+					owner.testVar += 40;
 				},
 				onFlip: function(owner, sender) {
 					console.log('c2 onFlip', sender);
@@ -92,14 +91,17 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 			}, 'c1');
 			MC.c('c3', {
 				baseVar: 1,
-				init: function() {
-					this.testVar += 2;
+				oninit: function(owner) {
+					owner.testVar += 2;
 				},
 				onFlip: function(owner, sender) {
 					console.log('c3 onFlip', sender);
 					owner.eventVar += 10;
 				}
 			}, 'c1');
+			MC.c('picky', {
+
+			});
 		},
 		function() {});
 	doh.run();
