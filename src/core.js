@@ -112,14 +112,14 @@ var Maracuja = function() {
 		var h = handlers[eventID];
 		if(typeof h !== 'undefined' && h.length > 0) {
 			if(h.length === 1) {
-				h[0].callback(h[0].owner, this, eventArgs);
+				h[0].callback(h[0].owner, MC, eventArgs);
 			} else {
 				for(var i in h) {
-					h[i].callback(h[i].owner, this, eventArgs);
+					h[i].callback(h[i].owner, MC, eventArgs);
 				}
 			}
 		}
-		return this;
+		return MC;
 	};
 
 	/**@ 
@@ -141,6 +141,8 @@ var Maracuja = function() {
 		gameTime.elapsedTotal += delta;
 		gameTime.elapsed = delta;
 		gameTime.frameCount++;
+		trigger('update', {gameTime: gameTime});
+		trigger('updated', {gameTime: gameTime});
 		Gfx.update(gameTime);
 	};
 

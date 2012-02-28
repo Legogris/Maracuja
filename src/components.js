@@ -6,7 +6,7 @@ var Components = function(MC) {
 			console.log('2D init', self);
 		},
 		onUpdated: function(self, sender, eventArgs) {
-			if(redraw && self.visible()) {
+			if(self.redraw && self.visible()) {
 				MC.Gfx.redrawEntity(self);
 			}
 		},

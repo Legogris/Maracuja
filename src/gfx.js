@@ -87,8 +87,6 @@ var Gfx = function(MC) {
 	**/
 	var update = function(_gameTime) {
 		gameTime = _gameTime;
-		MC.trigger('update', {gameTime: gameTime});
-		MC.trigger('updated', {gameTime: gameTime});
 		for(var i in redrawEntities) {
 			redrawEntities[i].trigger('draw', {gameTime: gameTime});
 		}
