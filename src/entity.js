@@ -166,16 +166,14 @@ var Entity = function(MC) {
 			return this;
 		};
 
-
-
 		this.has = has;
 		this.implement = implement;
 		this.bind = bind;
 		this.unbind = unbind;
 		this.trigger = trigger;
 		this.attach = attach;
-		//ACTUAL CONSTRUCTOR
 
+		//ACTUAL CONSTRUCTOR
 		this.attach(attrs);
 		this.implement(c);
 		return this;

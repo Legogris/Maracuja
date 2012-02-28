@@ -3,6 +3,12 @@ var Gfx = function(MC) {
 	var layers = [];
 	var redrawEntities = [];	//DOM Entities that were modified during this frame and need to be redrawn
 	var gameTime = undefined;
+	var viewport = {
+		x: undefined,
+		y: undefined,
+		width: undefined,
+		height: undefined
+	};
 	
 	/**@
 	* #Maracuja.Gfx.init
@@ -44,8 +50,11 @@ var Gfx = function(MC) {
 				}
 			}
 		}
-		this.sceneWidth = width;
-		this.sceneHeight = height;
+		this.sceneWidth = viewport.width = width;
+		this.sceneHeight = viewport.height = height;
+
+		viewport.x = 0;
+		viewport.y = 0;
 		return true;
 	};
 	
@@ -54,17 +63,32 @@ var Gfx = function(MC) {
 	* @category Gfx
 	* @sign public void Maracuja.Gfx.update(float gameTime)
 	* @param gameTime Dictionary holding time values
-	* Draw method that gets called each frame to update
+	* Method that gets called each frame to update all entities and draw those that should be
 	**/
 	var update = function(_gameTime) {
 		gameTime = _gameTime;
+		MC.trigger('update', {gameTime: gameTime});
+		MC.trigger('updated', {gameTime: gameTime});
 		for(var i in redrawEntities) {
-			redrawEntities[i].draw();
+			redrawEntities[i].trigger('draw', {gameTime: gameTime});
 		}
+		redrawEntities = [];
 		if(Canvas.inUse) {
 			Canvas.update(gameTime);
 		}
 	}
+
+	/**@
+	* #Maracuja.Gfx.redrawEntity
+	* @category Gfx
+	* @sign public void Maracuja.Gfx.redrawEntity(Entity e)
+	* @param value Entity Entity to redraw
+	* Tells the updater to queue this entity for redrawing next update
+	**/
+	var redrawEntity = function(e) {
+		redrawEntities.push(e);
+	};
+
 	
 	/**@
 	* #Maracuja.Gfx.background
@@ -81,6 +105,8 @@ var Gfx = function(MC) {
 		return this.scene.style.backgroundColor;
 	}
 
+
+
 	/* PUBLIC */
 	return MC.Gfx = {
 		Canvas: {},
@@ -89,6 +115,7 @@ var Gfx = function(MC) {
 		
 		init: init,
 		update: update,
+		redrawEntity: redrawEntity,
 		background: background
 	};
 }(Maracuja);
