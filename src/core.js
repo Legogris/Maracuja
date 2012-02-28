@@ -4,6 +4,7 @@ var Maracuja = function() {
 	var MC = this;
 	
 	//FIELDS/PROPERTIES
+	var handlers = [];
 	var entities = [];
 	var components = {};
 	var gameTime = {
@@ -58,6 +59,67 @@ var Maracuja = function() {
 	};
 
 	/**@
+	* #Maracuja.bind
+	* @category Core
+	* @sign public void Maracuja.bind(eventID, handler)
+	* @param eventID Event to bind to
+	* @param handler Callback to fire when event is triggered.
+	* @param owner Entity associated with callback. optional.
+	* Binds a new callback to an event.
+	* Callback gets called when event is triggered.
+	* Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
+	**/
+	var bind = function(eventID, handler, owner) {
+		if(typeof handlers[eventID] === 'undefined') {
+			handlers[eventID] = [];
+		}
+		handlers[eventID].push({owner: owner, callback: handler});
+	};
+
+	/**@
+	* #Maracuja.unbind
+	* @category Core
+	* @sign public void Maracuja.unbind(eventID, handler)
+	* @param eventID Event to unbind
+	* @param handler Callback to unbind.
+	* Unbinds a previously bound callback from a global event.
+	**/
+	var unbind = function(eventID, handler) {
+		var h = handlers[eventID];
+		if(h) {
+			for(var i = 0, l = h.length; i < l; i++) {
+				if(h[i].callback == handler) {
+					h.splice(i, 1);
+					i--;
+					l--;
+				}
+			}
+		}
+	}
+
+	/**@
+	* #Maracuja.trigger
+	* @category Core
+	* @sign public void Maracuja.trigger(eventID, eventArgs)
+	* @param eventID Event to trigger
+	* @param eventArgs Object with additional data to send to callback.
+	* Triggers an event, firing all bound callbacks.
+	**/
+	var trigger = function(eventID, eventArgs) {
+		var h = handlers[eventID];
+		if(typeof h !== 'undefined' && h.length > 0) {
+			if(h.length === 1) {
+				h[0].callback(h[0].owner, this, eventArgs);
+			} else {
+				for(var i in h) {
+					h[i].callback(h[i].owner, this, eventArgs);
+				}
+			}
+		}
+		return this;
+	};
+
+	/**@ 
 	* #Maracuja.update
 	* @category Core
 	* @sign public void Maracuja.update(int timeStamp)
@@ -77,7 +139,7 @@ var Maracuja = function() {
 		gameTime.elapsed = delta;
 		gameTime.frameCount++;
 		Gfx.update(gameTime);
-	}
+	};
 
 	/**@
 	* #Maracuja.startUpdating
@@ -121,9 +183,16 @@ var Maracuja = function() {
 		e: entity,
 		entity: entity,
 		getComponent: getComponent,
+		bind: bind,
+		unbind: unbind,
+		trigger: trigger,
 		update: update,
 		startUpdating: startUpdating,
 		stopUpdating: stopUpdating,
-		getFPS: getFPS
+		getFPS: getFPS,
+
+
+		//DEBUG
+		handlers: handlers
 	};
 }();

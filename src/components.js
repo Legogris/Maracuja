@@ -4,7 +4,7 @@ var Components = function(MC) {
 		init: function() {
 			console.log('2D init', this);
 		}
-	});
+	}, null, 'x y width height');
 
 	MC.c('Canvas', {
 		init: function() {

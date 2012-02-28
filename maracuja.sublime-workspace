@@ -36,14 +36,6 @@
 	"buffers":
 	[
 		{
-			"file": "src/entity.js",
-			"settings":
-			{
-				"buffer_size": 1252,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "src/component.js",
 			"settings":
 			{
@@ -93,10 +85,21 @@
 			}
 		},
 		{
+			"contents": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n<html>\n  <head>\n    <title>Maracuja Feature tester</title>\n	<script type=\"text/javascript\" src=\"/dojotoolkit/dojo/dojo.js\"\n		data-dojo-config=\"isDebug: true\"></script>\n	<script type=\"text/javascript\">\ndojo.registerModulePath('maracuja', '/lego/maracuja');\nrequire(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {\n	doh.registerGroup('maracuja.tests.core', \n		[\n			{\n				name: 'MC.init()',\n				timeout: 500,\n				runTest: function() {\n					var result = MC.init('scene');\n					doh.t(result);\n				}\n			},\n			{\n				name: 'MC.c, MC.getComponent, Component.getID',\n				timeout: 500,\n				runTest: function() {\n					var c1 = MC.getComponent('c1');\n					var c2 = MC.getComponent('c2');\n					doh.is(c1.getID(), 'c1');\n				}\n			},\n			{\n				name: 'MC.e',\n				timeout: 500,\n				runTest: function() {\n					var e = MC.e('c2');\n					doh.t(e.has('c1'));\n					doh.t(e.has('c2'));\n					doh.f(e.has('c3'));\n					console.log(e);\n					doh.is(60, e.testVar);\n					doh.is(30, e.baseVar);\n					e.implement('c3');\n					doh.t(e.has('c3'));\n					doh.is(62, e.testVar);\n					doh.is(1, e.baseVar);\n				}\n			},\n			{\n				name: 'Entity.bind, Entity.trigger',\n				timeout: 500,\n				runTest: function() {\n					var e = MC.e('c2');\n					doh.is(0, e.eventVar);\n\n					e.trigger('onFlip');\n					doh.is(102, e.eventVar);\n\n					e.implement('c3');\n					e.trigger('onFlip');\n					doh.is(214, e.eventVar);\n					\n					e.bind('onFlip', function(sender, eventArgs)  { sender.eventVar = eventArgs.val;});\n					e.trigger('onFlip', {val: 1337});\n					doh.is(1337, e.eventVar);\n				}\n			}\n\n		], function() {\n			testVar = 0;\n			MC.c('c1', {\n				testVar: 20,\n				baseVar: 30,\n				eventVar: 0,\n				init: function() {\n				},\n				onFlip: function(sender) {\n					sender.eventVar += 100;\n				}\n			});\n			MC.c('c2', {\n				init: function() {\n					this.testVar += 40;\n				},\n				onFlip: function(sender) {\n					sender.eventVar += 2;\n				}\n			}, 'c1');\n			MC.c('c3', {\n				baseVar: 1,\n				init: function() {\n					this.testVar += 2;\n				},\n				onFlip: function(sender) {\n					sender.eventVar += 10;\n				}\n			}, 'c1');\n		},\n		function() {});\n	doh.run();\n});\n	</script>\n  </head>\n  <body>\n	<div id=\"scene\" style=\"width: 600px; height: 400px;\"></div>\n  </body>\n</html>\n",
 			"file": "tests/core.html",
+			"file_size": 2373,
+			"file_write_time": 129748135944104985,
 			"settings":
 			{
-				"buffer_size": 1607,
+				"buffer_size": 2280,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/entity.js",
+			"settings":
+			{
+				"buffer_size": 1835,
 				"line_ending": "Windows"
 			}
 		}
@@ -125,6 +128,7 @@
 	},
 	"file_history":
 	[
+		"/D/dev/js/lego/Maracuja/src/entity.js",
 		"/home/legogris/dev/js/lego/maracuja/tests/functions/gfx.js",
 		"/home/legogris/dev/js/lego/maracuja/tests/all.js",
 		"/home/legogris/dev/js/lego/maracuja/src/helpers.js",
@@ -149,6 +153,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"has(",
 			"has",
 			"quality_factor"
 		],
@@ -169,38 +174,11 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/entity.js",
-					"settings":
-					{
-						"buffer_size": 1252,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								458,
-								458
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "src/component.js",
 					"settings":
 					{
@@ -227,7 +205,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "src/components.js",
 					"settings":
 					{
@@ -255,7 +233,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 2,
 					"file": "src/core.js",
 					"settings":
 					{
@@ -266,8 +244,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								800,
+								800
 							]
 						],
 						"settings":
@@ -282,7 +260,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "Makefile",
 					"settings":
 					{
@@ -308,7 +286,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "src/helpers.js",
 					"settings":
 					{
@@ -334,7 +312,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "tests/functions/core.js",
 					"settings":
 					{
@@ -361,19 +339,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 6,
 					"file": "tests/core.html",
 					"settings":
 					{
-						"buffer_size": 1607,
+						"buffer_size": 2280,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								69,
-								69
+								1476,
+								1476
 							]
 						],
 						"settings":
@@ -382,7 +360,34 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 135.0,
+						"translation.y": 137.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/entity.js",
+					"settings":
+					{
+						"buffer_size": 1835,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1457,
+								1457
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

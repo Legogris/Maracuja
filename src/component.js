@@ -1,7 +1,8 @@
 var Component = function(MC) {
-	return function(_id, attrs, ancestorIDs) {
+	return function(_id, attrs, ancestorIDs, _requires) {
 		var id = _id;	
 		var ancestors = [];
+		var requires = [];
 
 		var getID = function() {
 			return id;
@@ -11,20 +12,24 @@ var Component = function(MC) {
 		this.getID = getID;
 		this.ancestors = ancestors;
 		this.attrs = attrs;
+		this.requires = requires;
 
-		if(ancestorIDs !== undefined) {
+		if(typeof ancestorIDs !== 'undefined' && ancestorIDs) {
 			if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
 				ancestorIDs = ancestorIDs.split(' ');
 			}
 			for(var aID in ancestorIDs) {
-				//var ancestor = MC.getComponent(ancestorIDs[id]);
-				//console.log(id, ancestor);
+				//console.log(aID, ancestor);
 				ancestors.push(ancestorIDs[aID]);
-				/*for(var key in ancestor.attrs) {
-					this[key] = ancestor.attrs[key];
-				}*/
 			}
-
+		}
+		if(typeof _requires !== 'undefined' && _requires) {
+			if(Object.prototype.toString.apply(_requires) !== '[object Array]') {
+				_requires = _requires.split(' ');
+			}
+			for(var rID in _requires) {
+				ancestors.push(_requires[rID]);
+			}
 		}
 	};
 }(Maracuja);
