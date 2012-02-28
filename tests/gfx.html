@@ -35,6 +35,7 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 						},
 						onUpdate: function(self, sender, eventArgs) {
 							self.move(self.x+1, self.y);
+							console.log('update', self.x);
 						}
 					});
 				}
