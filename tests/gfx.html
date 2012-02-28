@@ -15,7 +15,31 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					MC.Gfx.background(color);
 					doh.is(color, MC.Gfx.background());
 				}
+			},
+			{
+				name: 'sprite',
+				runTest: function(t) {
+					var e = MC.e('DOM', {
+						x: 20,
+						y: 40,
+						width: 16,
+						height: 32,
+						tileMap: {
+							image: '/lego/maracuja/tests/mario.png',
+							tileWidth: 16,
+							tileHeight: 32
+						},
+						tileIndex: {
+							x: 0,
+							y: 0
+						},
+						onUpdate: function(self, sender, eventArgs) {
+							self.move(self.x+1, self.y);
+						}
+					});
+				}
 			}
+
 		],
 		function() { //setUp
 			MC.init('scene');

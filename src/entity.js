@@ -130,13 +130,13 @@ var Entity = function(MC) {
 				} else { //unbind all handlers
 					//Optimize for case when there is only one callback
 					if(h.length === 1) {
-						Maracuja.unbind(eventID, handler);						
+						Maracuja.unbind(eventID, h[0]);						
 					} else {
 						for(var i = 0, l = h.length; i < l; i++) {
 							Maracuja.unbind(eventID, h[i]);
 						}
-						handlers[eventID] = [];
 					}
+					handlers[eventID] = [];
 				}
 
 			}

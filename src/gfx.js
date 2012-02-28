@@ -9,7 +9,7 @@ var Gfx = function(MC) {
 		width: undefined,
 		height: undefined
 	};
-	
+
 	/**@
 	* #Maracuja.Gfx.init
 	* @category Gfx
@@ -55,9 +55,29 @@ var Gfx = function(MC) {
 
 		viewport.x = 0;
 		viewport.y = 0;
+
+		layers = [];
+		this.addLayer();
 		return true;
 	};
 	
+	var addLayer = function() {
+		var element = document.createElement('div');
+		layers.push(element);
+		var layerID = layers.length;
+		element.setAttribute('id', 'layer' + layerID);
+		element.style.position = 'relative';
+		element.style.overflow = 'hidden';
+		element.style.width = this.sceneWidth+'px';
+		element.style.height = this.sceneHeight+'px';
+		scene.appendChild(element);
+		return layerID;
+	}; 
+
+	var getLayer = function(id) {
+		return layers[id];
+	}; 
+
 	/**@
 	* #Maracuja.Gfx.update
 	* @category Gfx
@@ -112,7 +132,10 @@ var Gfx = function(MC) {
 		Canvas: {},
 		
 		scene: undefined,
-		
+		viewport: viewport,
+
+		addLayer: addLayer,
+		getLayer: getLayer,
 		init: init,
 		update: update,
 		redrawEntity: redrawEntity,
