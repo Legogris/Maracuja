@@ -68,8 +68,12 @@ var Gfx = function(MC) {
 		element.setAttribute('id', 'layer' + layerID);
 		element.style.position = 'relative';
 		element.style.overflow = 'hidden';
+		element.width = this.sceneWidth;
+		element.height = this.sceneHeight;
 		element.style.width = this.sceneWidth+'px';
 		element.style.height = this.sceneHeight+'px';
+		element.x = viewport.x;
+		element.y = viewport.y;
 		scene.appendChild(element);
 		return layerID;
 	}; 

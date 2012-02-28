@@ -174,7 +174,6 @@ var Maracuja = function() {
 	* Gets the current actual framerate
 	**/
 	var getFPS = function() {
-		console.log(gameTime);
 		return gameTime.frameCount / gameTime.elapsedTotal * 1000;
 	}
 	

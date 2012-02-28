@@ -35,8 +35,11 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 						},
 						onUpdate: function(self, sender, eventArgs) {
 							self.move(self.x+1, self.y);
-							console.log('update', self.x);
+							self.layer.y--;
 						}
+					});
+					MC.bind('update', function(self, sender, eventArgs) {
+						document.getElementById('status').innerHTML = MC.getFPS() + ' fps';
 					});
 					MC.startUpdating();
 				}
@@ -55,5 +58,6 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
   </head>
   <body>
 	<div id="scene" style="width: 600px; height: 400px;"></div>
+	<div id="status"></div>
   </body>
 </html>
