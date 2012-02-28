@@ -19,7 +19,6 @@ var Component = function(MC) {
 				ancestorIDs = ancestorIDs.split(' ');
 			}
 			for(var aID in ancestorIDs) {
-				//console.log(aID, ancestor);
 				ancestors.push(ancestorIDs[aID]);
 			}
 		}
@@ -28,7 +27,7 @@ var Component = function(MC) {
 				_requires = _requires.split(' ');
 			}
 			for(var rID in _requires) {
-				ancestors.push(_requires[rID]);
+				requires.push(_requires[rID]);
 			}
 		}
 	};

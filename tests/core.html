@@ -43,6 +43,15 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				}
 			},
 			{
+				name: 'Entity requires',
+				timeout: 500,
+				runTest: function() {
+					doh.assertError(MC.RequirementFailedError, MC, 'e', ['picky'], 'Requirement check failed');
+					var e = MC.e('picky', {thisToo: 15});
+					doh.is(25, e.thisToo);
+				}
+			},
+			{
 				name: 'Entity.bind, Entity.trigger',
 				timeout: 500,
 				runTest: function() {
@@ -56,7 +65,10 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					e.trigger('flip');
 					doh.is(214, e.eventVar);
 					
-					var customHandler = function(owner, sender, eventArgs)  { owner.eventVar = eventArgs.val; console.log('custom onFlip');};
+					var customHandler = function(owner, sender, eventArgs)  {
+						owner.eventVar = eventArgs.val;
+						//console.log('custom onFlip');
+					};
 					e.bind('flip', customHandler);
 					MC.trigger('flip', {val: 1337});
 					doh.is(1337, e.eventVar);
@@ -74,34 +86,37 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				eventVar: 0,
 				oninit: function() {
 				},
-				onFlip: function(owner, sender) {
-					console.log('c1 onFlip', sender);
-					owner.eventVar += 100;
+				onFlip: function(self, sender) {
+					//console.log('c1 onFlip', sender);
+					self.eventVar += 100;
 				}
 			});
 			MC.c('c2', {
-				oninit: function(owner) {
-					console.log('c2 init');
-					owner.testVar += 40;
+				oninit: function(self) {
+					//console.log('c2 init');
+					self.testVar += 40;
 				},
-				onFlip: function(owner, sender) {
-					console.log('c2 onFlip', sender);
-					owner.eventVar += 2;
+				onFlip: function(self, sender) {
+					//console.log('c2 onFlip', sender);
+					self.eventVar += 2;
 				}
 			}, 'c1');
 			MC.c('c3', {
 				baseVar: 1,
-				oninit: function(owner) {
-					owner.testVar += 2;
+				oninit: function(self) {
+					self.testVar += 2;
 				},
-				onFlip: function(owner, sender) {
-					console.log('c3 onFlip', sender);
-					owner.eventVar += 10;
+				onFlip: function(self, sender) {
+					//console.log('c3 onFlip', sender);
+					self.eventVar += 10;
 				}
 			}, 'c1');
 			MC.c('picky', {
-
-			});
+				oninit: function(self) {
+					self.thisToo += 10;
+				},
+				wants: 'has',
+			}, 'c1', 'testVar wants thisToo');
 		},
 		function() {});
 	doh.run();

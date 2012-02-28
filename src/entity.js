@@ -34,22 +34,19 @@ var Entity = function(MC) {
 		
 		var addComponent = function(e, c) {
 			if(c && !e.has(c.getID())) {
-				console.log('addComponent', c.getID());
 				components[c.getID()] = c;
 				if(c.ancestors.length > 0) {
 					e.implement(c.ancestors);
 				}
 				e.attach(c.attrs);
-				e.trigger('init');
-				e.unbind('init');
 				var req = c.requires;
-				if(req) {
-					for(var i = 0, l = req.length; i < l; i++) {
-						if(typeof this[req[i]] === 'undefined') {
-							throw {name: 'NotSatisfiedError', message: 'Component requirement ' + req[i] + ' not satisfied.'};
-						}
+				for(var i = 0, l = req.length; i < l; i++) {
+					if(typeof e[req[i]] === 'undefined') {
+						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
 				}
+				e.trigger('init');
+				e.unbind('init');
 			} 
 			return e;
 		};

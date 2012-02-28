@@ -42,16 +42,16 @@ var Maracuja = function() {
 		return result;
 	};
 	
-	var component = function(id, attrs, inherits) {
+	var component = function(id, attrs, inherits, requires) {
 		if(components[id]) {
 			throw new Error('Trying to add component with existing id.');
 		}
-		components[id] = new Component(id, attrs, inherits);
+		components[id] = new Component(id, attrs, inherits, requires);
 		return components[id];
 	}
 
-	var entity = function(component) {
-		return new Entity(component);
+	var entity = function(component, attrs) {
+		return new Entity(component, attrs);
 	};
 	
 	var getComponent = function(id) {
@@ -193,7 +193,6 @@ var Maracuja = function() {
 		startUpdating: startUpdating,
 		stopUpdating: stopUpdating,
 		getFPS: getFPS,
-
 
 		//DEBUG
 		handlers: handlers
