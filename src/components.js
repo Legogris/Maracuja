@@ -26,17 +26,13 @@ var Components = function(MC) {
 		onInit: function(self) {
 			var element = document.createElement('div')
 			element.style.position = 'absolute';
-			element.style.width = self.width + 'px';
-			element.style.height = self.height + 'px';
-			element.style.backgroundImage = "url('"+self.tileMap.image+"')";
 			element.style.backgroundRepeat = 'no-repeat';
-			element.style.backgroundPosition = (self.tileIndex.x*self.tileMap.tileWidth)+'px ' + (self.tileIndex.y*self.tileMap.tileHeight)+'px';
 			self.layer = MC.Gfx.getLayer(self.layerIndex); 
-			console.log(self.layer);
 			self.layer.appendChild(element);
 			self.element = element;
-			self.updatePosition();
-			self.redraw = true;
+			if(typeof self.tileMap !== 'undefined') {
+				self.loadSprite(self.tileMap);
+			}
 		},
 		updatePosition: function() {
 			if(this.visible()) {
@@ -47,6 +43,17 @@ var Components = function(MC) {
 				this.element.style.display = 'none';
 			}
 		},
+		loadSprite: function(tileMap) {
+			this.tileMap = tileMap;
+			this.element.style.width = this.width + 'px';
+			this.element.style.height = this.height + 'px';
+			this.element.style.backgroundImage = "url('"+this.tileMap.image+"')";
+			if(typeof this.tileIndex !== 'undefined') {
+				this.element.style.backgroundPosition = (this.tileIndex.x*this.tileMap.tileWidth)+'px ' + (this.tileIndex.y*this.tileMap.tileHeight)+'px';
+			}
+			this.updatePosition();
+			this.redraw = true;
+		},
 		onUpdate: function(self, sender, eventArgs) {},
 		onDraw: function(self, sender, eventArgs) {
 			self.updatePosition();
@@ -56,15 +63,17 @@ var Components = function(MC) {
 
 	MC.c('Sprite', {
 		layerIndex: 0,
+		tileIndex: {x: 0, y: 0},
 		onInit: function(self) {
 			console.log('Sprite init');
+			self.spriteLoaded = false;
 		}, 
 		move: function(x, y) {
 			this.x = x;
 			this.y = y;
 			this.redraw = true;
 		}
-	}, '2D', 'tileMap tileIndex');
+	}, '2D', 'loadSprite');
 
 	} catch(e) { console.log(e);};
 

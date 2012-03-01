@@ -35,9 +35,6 @@ var Entity = function(MC) {
 		var addComponent = function(e, c) {
 			if(c && !e.has(c.getID())) {
 				components[c.getID()] = c;
-				if(c.ancestors.length > 0) {
-					e.implement(c.ancestors);
-				}
 				e.attach(c.attrs);
 				var req = c.requires;
 				for(var i = 0, l = req.length; i < l; i++) {
@@ -45,6 +42,10 @@ var Entity = function(MC) {
 						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
 				}
+				if(c.ancestors.length > 0) {
+					e.implement(c.ancestors);
+				}
+				handlers['init'].reverse(); //So that ancestors init methods get executed first
 				e.trigger('init');
 				e.unbind('init');
 			} 
