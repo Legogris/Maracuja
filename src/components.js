@@ -53,6 +53,7 @@ var Components = function(MC) {
 			}
 			this.updatePosition();
 			this.redraw = true;
+			this.spriteLoaded = true;
 		},
 		onUpdate: function(self, sender, eventArgs) {},
 		onDraw: function(self, sender, eventArgs) {
