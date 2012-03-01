@@ -2,15 +2,25 @@ var Components = function(MC) {
 	try {
 	MC.c('2D', {
 		redraw: false,
+		_visible: true,
 		onInit: function(self) {
-			console.log('2D init', self);
+			//console.log('2D init', self);
 		},
 		onUpdated: function(self, sender, eventArgs) {
 			if(self.redraw && self.visible()) {
 				MC.Gfx.redrawEntity(self);
 			}
 		},
+		show: function() {
+			this._visible = true;
+		},
+		hide: function() {
+			this._visible = false;
+		},
 		visible: function() {
+			if(this._visible === false) {
+				return false;
+			}
 			var side = Math.max(this.width, this.height); //To make sure we always stay inside even at rotation
 			return this.x + side >= this.layer.x && this.x < this.layer.x + this.layer.width &&
 				this.y + side >= this.layer.y && this.y < this.layer.y + this.layer.height;
@@ -48,6 +58,7 @@ var Components = function(MC) {
 			this.element.style.width = this.width + 'px';
 			this.element.style.height = this.height + 'px';
 			this.element.style.backgroundImage = "url('"+this.tileMap.image+"')";
+			this.element.style.backgroundSize = this.width+'px ' + this.height+'px';
 			if(typeof this.tileIndex !== 'undefined') {
 				this.element.style.backgroundPosition = (this.tileIndex.x*this.tileMap.tileWidth)+'px ' + (this.tileIndex.y*this.tileMap.tileHeight)+'px';
 			}
@@ -66,7 +77,7 @@ var Components = function(MC) {
 		layerIndex: 0,
 		tileIndex: {x: 0, y: 0},
 		onInit: function(self) {
-			console.log('Sprite init');
+			//console.log('Sprite init');
 			self.spriteLoaded = false;
 		}, 
 		move: function(x, y) {

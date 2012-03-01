@@ -27,27 +27,30 @@ var Entity = function(MC) {
 					com = MC.getComponent(pieces[i]);
 					addComponent(com);
 				}
-				return this;
+			} else {
+				addComponent(this, com);
 			}
-			return addComponent(this, com);
+			handlers['init'].reverse();
+			this.trigger('init');
+			this.unbind('init');
+			return this;
 		};
 		
 		var addComponent = function(e, c) {
 			if(c && !e.has(c.getID())) {
 				components[c.getID()] = c;
 				e.attach(c.attrs);
+				for(var i = 0, l = c.ancestors.length; i < l; i++) {
+					var com = MC.getComponent(c.ancestors[i]);
+					addComponent(e, com);
+				}
 				var req = c.requires;
 				for(var i = 0, l = req.length; i < l; i++) {
 					if(typeof e[req[i]] === 'undefined') {
 						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
+					console.log("fullfills " + req[i] + ' with ' + e[req[i]]);
 				}
-				if(c.ancestors.length > 0) {
-					e.implement(c.ancestors);
-				}
-				handlers['init'].reverse(); //So that ancestors init methods get executed first
-				e.trigger('init');
-				e.unbind('init');
 			} 
 			return e;
 		};
@@ -63,7 +66,7 @@ var Entity = function(MC) {
 		var attach = function(attrs) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
-					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler
+					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
 						this.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {

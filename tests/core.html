@@ -84,7 +84,8 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				testVar: 20,
 				baseVar: 30,
 				eventVar: 0,
-				oninit: function() {
+				onInit: function() {
+						console.log('c1 init');
 				},
 				onFlip: function(self, sender) {
 					//console.log('c1 onFlip', sender);
@@ -92,8 +93,8 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				}
 			});
 			MC.c('c2', {
-				oninit: function(self) {
-					//console.log('c2 init');
+				onInit: function(self) {
+					console.log('c2 init');
 					self.testVar += 40;
 				},
 				onFlip: function(self, sender) {
@@ -103,8 +104,9 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 			}, 'c1');
 			MC.c('c3', {
 				baseVar: 1,
-				oninit: function(self) {
+				onInit: function(self) {
 					self.testVar += 2;
+					console.log('c3 init');
 				},
 				onFlip: function(self, sender) {
 					//console.log('c3 onFlip', sender);
@@ -112,7 +114,7 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				}
 			}, 'c1');
 			MC.c('picky', {
-				oninit: function(self) {
+				onInit: function(self) {
 					self.thisToo += 10;
 				},
 				wants: 'has',
