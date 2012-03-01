@@ -40,10 +40,30 @@ var Components = function(MC) {
 			self.layer = MC.Gfx.getLayer(self.layerIndex); 
 			self.layer.appendChild(element);
 			self.element = element;
+			for(var eventID in self._handlers) {
+				if(MC.Settings.domEvents.indexOf(eventID) > -1) {
+					self.element.addEventListener(eventID, function(e) {
+						self.trigger(e.type, e);
+					});
+				}
+			}
 			if(typeof self.tileMap !== 'undefined') {
 				self.loadSprite(self.tileMap);
 			}
 		},
+		onUpdate: function(self, sender, eventArgs) {
+		},
+		onDraw: function(self, sender, eventArgs) {
+			self.updatePosition();
+		},
+		onEventBound: function(self, sender, eventArgs) {
+			if(MC.Settings.domEvents.indexOf(eventArgs.eventID) > -1) {
+				self.element.addEventListener(eventArgs.eventID, function(e) {
+					self.trigger(e.type, e);
+				});
+			}
+		},
+
 		updatePosition: function() {
 			if(this.visible()) {
 				this.element.style.display = 'block';
@@ -66,10 +86,6 @@ var Components = function(MC) {
 			this.redraw = true;
 			this.spriteLoaded = true;
 		},
-		onUpdate: function(self, sender, eventArgs) {},
-		onDraw: function(self, sender, eventArgs) {
-			self.updatePosition();
-		}
 	}, 'Sprite');
 
 

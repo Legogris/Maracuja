@@ -13,6 +13,7 @@ BASE_FILES = ${SRC_DIR}/core.js\
 	${SRC_DIR}/gfx.js\
 	${SRC_DIR}/canvas.js\
 	${SRC_DIR}/errors.js\
+	${SRC_DIR}/settings.js\
 	${SRC_DIR}/helpers.js
 
 MODULES = license.txt\

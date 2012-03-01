@@ -49,7 +49,6 @@ var Entity = function(MC) {
 					if(typeof e[req[i]] === 'undefined') {
 						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
-					console.log("fullfills " + req[i] + ' with ' + e[req[i]]);
 				}
 			} 
 			return e;
@@ -106,6 +105,7 @@ var Entity = function(MC) {
 			}
 			handlers[eventID].push({owner: this, callback: handler});
 			Maracuja.bind(eventID, handler, this);
+			this.trigger('eventBound', {eventID: eventID, callback: handler});
 			return this;
 		};
 
@@ -176,6 +176,7 @@ var Entity = function(MC) {
 		this.unbind = unbind;
 		this.trigger = trigger;
 		this.attach = attach;
+		this._handlers = handlers;
 
 		//ACTUAL CONSTRUCTOR
 		this.attach(attrs);
