@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"redra",
+				"redraw"
+			],
+			[
+				"to",
+				"toLowerCase"
+			],
+			[
+				"on",
+				"oninit"
+			],
+			[
 				"redr",
 				"redrawEntities"
 			],
@@ -79,9 +91,18 @@
 			"file": "src/components.js",
 			"settings":
 			{
-				"buffer_size": 2016,
+				"buffer_size": 4225,
 				"line_ending": "Windows",
 				"name": "function(){"
+			}
+		},
+		{
+			"file": "src/settings.js",
+			"settings":
+			{
+				"buffer_size": 307,
+				"line_ending": "Windows",
+				"name": "var Settings = {"
 			}
 		},
 		{
@@ -105,7 +126,7 @@
 			"file": "Makefile",
 			"settings":
 			{
-				"buffer_size": 1156,
+				"buffer_size": 1181,
 				"line_ending": "Windows"
 			}
 		},
@@ -121,7 +142,7 @@
 			"file": "tests/core.html",
 			"settings":
 			{
-				"buffer_size": 3016,
+				"buffer_size": 3074,
 				"line_ending": "Windows"
 			}
 		},
@@ -129,15 +150,33 @@
 			"file": "src/entity.js",
 			"settings":
 			{
-				"buffer_size": 5059,
+				"buffer_size": 5646,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 35 files for \"redrawEntities\"\n\nD:\\dev\\js\\lego\\Maracuja\\maracuja.sublime-workspace:\n    6  			[\n    7  				\"redr\",\n    8: 				\"redrawEntities\"\n    9  			],\n   10  			[\n   ..\n   14  			[\n   15  				\"redrawe\",\n   16: 				\"redrawEntities\"\n   17  			],\n   18  			[\n\nD:\\dev\\js\\lego\\Maracuja\\src\\gfx.js:\n    2  var Gfx = function(MC) {\n    3  	var layers = [];\n    4: 	var redrawEntities = [];	//DOM Entities that were modified during this frame and need to be redrawn\n    5  	var gameTime = undefined;\n    6  	var viewport = {\n    .\n   92  	var update = function(_gameTime) {\n   93  		gameTime = _gameTime;\n   94: 		for(var i in redrawEntities) {\n   95: 			redrawEntities[i].trigger('draw', {gameTime: gameTime});\n   96  		}\n   97: 		redrawEntities.length = 0;\n   98  		if(Canvas.inUse) {\n   99  			Canvas.update(gameTime);\n  ...\n  109  	**/\n  110  	var redrawEntity = function(e) {\n  111: 		redrawEntities.push(e);\n  112  	};\n  113  \n\n7 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 965,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
 			"file": "src/gfx.js",
 			"settings":
 			{
-				"buffer_size": 3637,
+				"buffer_size": 3642,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/polyfills.js",
+			"settings":
+			{
+				"buffer_size": 991,
 				"line_ending": "Windows"
 			}
 		}
@@ -186,6 +225,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -193,6 +233,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"redrawEntity",
+			"redrawEntities",
+			"redrawen",
+			"self",
 			"self.la",
 			"attach",
 			".bind",
@@ -210,6 +254,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"this",
 			"quality_change"
 		],
 		"reverse": false,
@@ -221,6 +266,7 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -255,15 +301,15 @@
 					"file": "src/components.js",
 					"settings":
 					{
-						"buffer_size": 2016,
+						"buffer_size": 4225,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1607,
-								1607
+								2004,
+								2004
 							]
 						],
 						"settings":
@@ -273,13 +319,40 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 810.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "src/settings.js",
+					"settings":
+					{
+						"buffer_size": 307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								307,
+								307
+							]
+						],
+						"settings":
+						{
+							"auto_name": "var Settings = {",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
 					"file": "src/core.js",
 					"settings":
 					{
@@ -290,8 +363,8 @@
 						"selection":
 						[
 							[
-								2965,
-								2965
+								1146,
+								1146
 							]
 						],
 						"settings":
@@ -300,13 +373,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1305.0,
+						"translation.y": 1395.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "src/errors.js",
 					"settings":
 					{
@@ -333,19 +406,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "Makefile",
 					"settings":
 					{
-						"buffer_size": 1156,
+						"buffer_size": 1181,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								258,
-								258
+								283,
+								283
 							]
 						],
 						"settings":
@@ -359,7 +432,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "src/helpers.js",
 					"settings":
 					{
@@ -385,19 +458,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "tests/core.html",
 					"settings":
 					{
-						"buffer_size": 3016,
+						"buffer_size": 3074,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1170,
-								1170
+								939,
+								939
 							]
 						],
 						"settings":
@@ -406,52 +479,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 180.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/entity.js",
-					"settings":
-					{
-						"buffer_size": 5059,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1913,
-								1913
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 45.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 8,
-					"file": "src/gfx.js",
+					"file": "src/entity.js",
 					"settings":
 					{
-						"buffer_size": 3637,
+						"buffer_size": 5646,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2211,
-								2211
+								1736,
+								1736
 							]
 						],
 						"settings":
@@ -460,7 +506,129 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1530.0,
+						"translation.y": 495.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"settings":
+					{
+						"buffer_size": 965,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										136,
+										150
+									],
+									[
+										229,
+										243
+									],
+									[
+										376,
+										390
+									],
+									[
+										633,
+										647
+									],
+									[
+										661,
+										675
+									],
+									[
+										738,
+										752
+									],
+									[
+										896,
+										910
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								297,
+								297
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/gfx.js",
+					"settings":
+					{
+						"buffer_size": 3642,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2733,
+								2745
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 648.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/polyfills.js",
+					"settings":
+					{
+						"buffer_size": 991,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								852,
+								852
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

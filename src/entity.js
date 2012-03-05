@@ -39,7 +39,7 @@ var Entity = function(MC) {
 		var addComponent = function(e, c) {
 			if(c && !e.has(c.getID())) {
 				components[c.getID()] = c;
-				e.attach(c.attrs);
+				_attach(e, c.attrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
 					var com = MC.getComponent(c.ancestors[i]);
 					addComponent(e, com);
@@ -63,13 +63,19 @@ var Entity = function(MC) {
 		* Values with keys starting with 'on' will be bound as event handlers.
 		**/
 		var attach = function(attrs) {
+			_attach(this, attrs, true);
+		};
+
+		var _attach = function(e, attrs, override) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
 					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
-						this.bind(key.substring(2, key.length), attrs[key]);
+						e.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {
-						this[key] = attrs[key];
+						if(override || typeof e[key] === 'undefined') {
+							e[key] = attrs[key];
+						}
 					}
 				}
 			}
@@ -156,7 +162,6 @@ var Entity = function(MC) {
 		* Triggers an event, firing all bound callbacks.
 		**/
 		var trigger = function(eventID, eventArgs) {
-			eventID = eventID.toLowerCase();
 			var h = handlers[eventID];
 			if(typeof h !== 'undefined' && h.length > 0) {
 				if(h.length === 1) {
@@ -170,12 +175,20 @@ var Entity = function(MC) {
 			return this;
 		};
 
+		var destroy = function() {
+			this.trigger('destroy');
+			for(var eventID in handlers) {
+				this.unbind(eventID);
+			}
+		};
+
 		this.has = has;
 		this.implement = implement;
 		this.bind = bind;
 		this.unbind = unbind;
 		this.trigger = trigger;
 		this.attach = attach;
+		this.destroy = destroy;
 		this._handlers = handlers;
 
 		//ACTUAL CONSTRUCTOR
