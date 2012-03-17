@@ -1,34 +1,81 @@
-var Component = function(MC) {
-	return function(_id, attrs, ancestorIDs, _requires) {
-		var id = _id;	
-		var ancestors = [];
-		var requires = [];
+/*var Component = function(MC) {
+	var constructor = function(my, id, attrs, ancestorIDs, requires) {
+		console.log(arguments);
+		if(typeof ancestorIDs !== 'undefined' && ancestorIDs) {
+			if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
+				ancestorIDs = ancestorIDs.split(' ');
+			}
+			for(var aID in ancestorIDs) {
+				my.ancestors.push(ancestorIDs[aID]);
+			}
+		}
+		if(typeof requires !== 'undefined' && requires) {
+			if(Object.prototype.toString.apply(requires) !== '[object Array]') {
+				requires = requires.split(' ');
+			}
+			for(var rID in requires) {
+				my.requires.push(requires[rID]);
+			}
+		}
+	};
 
-		var getID = function() {
-			return id;
+	return function(id, attrs, ancestorIDs, requires) {
+		var my = {
+			id: id,
+			attrs: attrs,
+			requires: [],
+			ancestors: []
 		};
 
-		//CONSTRUCTOR
+
+		//Properties
+		Object.defineProperties(this, {
+			ancestors:	{ get: function() { return my.ancestors; }},
+			attrs: 		{ get: function() { return my.attrs; }},
+			requires: 	{ get: function() { return my.requires; }}
+		});
 		this.getID = getID;
-		this.ancestors = ancestors;
-		this.attrs = attrs;
-		this.requires = requires;
+
+		//Constructor
+		var args = Array.prototype.slice.apply(arguments);
+		args.unshift(my);
+		constructor.apply(this, args);
+		console.log(this);
+		return this;
+	};
+}(Maracuja);*/
+var Component = function(MC) {
+	var constructor = function(my, id, attrs, ancestorIDs, requires) {
+		var getID = function() {
+			return my.id;
+		};
+		
+		my.id = id;
+		my.attrs = attrs;
+		my.requires = [];
+		my.ancestors = [];
 
 		if(typeof ancestorIDs !== 'undefined' && ancestorIDs) {
 			if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
 				ancestorIDs = ancestorIDs.split(' ');
 			}
 			for(var aID in ancestorIDs) {
-				ancestors.push(ancestorIDs[aID]);
+				my.ancestors.push(ancestorIDs[aID]);
 			}
+			console.log(id, 'ancestors', my.ancestors);
 		}
-		if(typeof _requires !== 'undefined' && _requires) {
-			if(Object.prototype.toString.apply(_requires) !== '[object Array]') {
-				_requires = _requires.split(' ');
+		if(typeof requires !== 'undefined' && requires) {
+			if(Object.prototype.toString.apply(requires) !== '[object Array]') {
+				requires = requires.split(' ');
 			}
-			for(var rID in _requires) {
-				requires.push(_requires[rID]);
+			for(var rID in requires) {
+				my.requires.push(requires[rID]);
 			}
+			console.log(id, 'requires', my.requires)
 		}
+		this.getID = getID;
 	};
+
+	c = Class(constructor, ['ancestors', 'attrs', 'requires']);
+	return c;
 }(Maracuja);

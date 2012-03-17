@@ -30,9 +30,11 @@ var Entity = function(MC) {
 			} else {
 				addComponent(this, com);
 			}
-			handlers['init'].reverse(); //Usually event callbacks will be called in order of attachement - with onInit, the base ones get called first
-			this.trigger('init');
-			this.unbind('init');
+			if(typeof handlers['init'] !== 'undefined') {
+				handlers['init'].reverse(); //Usually event callbacks will be called in order of attachement - with onInit, the base ones get called first
+				this.trigger('init');
+				this.unbind('init');
+			}
 			return this;
 		};
 		
