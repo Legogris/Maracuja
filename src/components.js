@@ -140,15 +140,18 @@ var Components = function(MC) {
 				this.element.style.width = this.width + 'px';
 				this.element.style.height = this.height + 'px';
 				this.element.style.backgroundImage = "url('"+this.tileMap.image+"')";
-				this.element.style.backgroundSize = this.width+'px ' + this.height+'px';
+				this.element.style.backgroundSize = this.width*this.tileMap.size.x+'px ' + this.height*this.tileMap.size.y+'px';
 				if(typeof this.tileIndex !== 'undefined') {
-					this.element.style.backgroundPosition = (this.tileIndex.x*this.tileMap.tileWidth)+'px ' + (this.tileIndex.y*this.tileMap.tileHeight)+'px';
+					this.element.style.backgroundPosition = -(this.tileIndex.x*this.width)+'px ' + (this.tileIndex.y*this.height)+'px';
 				}
 				this.updatePosition();
 				this.redraw = true;
 				this.spriteLoaded = true;
 				return this;
 			},
+			reloadSprite: function() {
+				this.loadSprite(this.tileMap);
+			}
 		}, 'DOM Sprite');
 	} catch(e) { console.log(e);};
 }(Maracuja);
