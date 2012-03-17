@@ -41,7 +41,7 @@ var Entity = function(MC) {
 		var addComponent = function(c) {
 			if(c && !this.has(c.getID())) {
 				my.components[c.getID()] = c;
-				_attach(e, c.attrs, false);
+				_attach(this, c.attrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
 					var com = MC.getComponent(c.ancestors[i]);
 					addComponent.call(this, com);
@@ -53,7 +53,7 @@ var Entity = function(MC) {
 					}
 				}
 			} 
-			return e;
+			return this;
 		};
 
 		/**@
