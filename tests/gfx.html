@@ -37,23 +37,23 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 							x: 1,
 							y: 0
 						},
-						onUpdate: function(self, sender, eventArgs) {
-							if(eventArgs.gameTime.elapsedTotal >= self.nextAnim) {
-								self.move(self.x-1, self.y);
+						onUpdate: function(sender, eventArgs) {
+							if(eventArgs.gameTime.elapsedTotal >= this.nextAnim) {
+								this.move(this.x-1, this.y);
 								//console.log(eventArgs.gameTime.elapsedTotal);
-								self.tileIndex.x = (self.tileIndex.x + 1) % 4;
-								if(self.tileIndex.x == 0) {
-									self.layer.y += 1;
+								this.tileIndex.x = (this.tileIndex.x + 1) % 4;
+								if(this.tileIndex.x == 0) {
+									this.layer.y += 1;
 								}
-								self.reloadSprite();
-								self.nextAnim = eventArgs.gameTime.elapsedTotal + 100;
+								this.reloadSprite();
+								this.nextAnim = eventArgs.gameTime.elapsedTotal + 100;
 							}
 						},
-						onInit: function(self) {
-							self.nextAnim = 0;
+						onInit: function() {
+							this.nextAnim = 0;
 						}
 					});
-					MC.bind('update', function(self, sender, eventArgs) {
+					MC.bind('update', function(sender, eventArgs) {
 						document.getElementById('status').innerHTML = MC.getFPS() + ' fps';
 					});
 					MC.startUpdating();

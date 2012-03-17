@@ -65,8 +65,8 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					e.trigger('flip');
 					doh.is(214, e.eventVar);
 					
-					var customHandler = function(owner, sender, eventArgs)  {
-						owner.eventVar = eventArgs.val;
+					var customHandler = function(sender, eventArgs)  {
+						this.eventVar = eventArgs.val;
 						//console.log('custom onFlip');
 					};
 					e.bind('flip', customHandler);
@@ -87,35 +87,35 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 				onInit: function() {
 						console.log('c1 init');
 				},
-				onFlip: function(self, sender) {
+				onFlip: function(sender) {
 					//console.log('c1 onFlip', sender);
-					self.eventVar += 100;
+					this.eventVar += 100;
 				}
 			});
 			MC.c('c2', {
-				onInit: function(self) {
+				onInit: function() {
 					console.log('c2 init');
-					self.testVar += 40;
+					this.testVar += 40;
 				},
-				onFlip: function(self, sender) {
+				onFlip: function(sender) {
 					//console.log('c2 onFlip', sender);
-					self.eventVar += 2;
+					this.eventVar += 2;
 				}
 			}, 'c1');
 			MC.c('c3', {
 				baseVar: 1,
-				onInit: function(self) {
-					self.testVar += 2;
+				onInit: function() {
+					this.testVar += 2;
 					console.log('c3 init');
 				},
-				onFlip: function(self, sender) {
+				onFlip: function(sender) {
 					//console.log('c3 onFlip', sender);
-					self.eventVar += 10;
+					this.eventVar += 10;
 				}
 			}, 'c1');
 			MC.c('picky', {
-				onInit: function(self) {
-					self.thisToo += 10;
+				onInit: function() {
+					this.thisToo += 10;
 				},
 				wants: 'has',
 			}, 'c1', 'testVar wants thisToo');

@@ -112,10 +112,10 @@ var Maracuja = function() {
 		var h = handlers[eventID];
 		if(typeof h !== 'undefined' && h.length > 0) {
 			if(h.length === 1) {
-				h[0].callback(h[0].owner, MC, eventArgs);
+				h[0].callback.call(h[0].owner, MC, eventArgs);
 			} else {
 				for(var i in h) {
-					h[i].callback(h[i].owner, MC, eventArgs);
+					h[i].callback.call(h[i].owner, MC, eventArgs);
 				}
 			}
 		}

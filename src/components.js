@@ -4,13 +4,13 @@ var Components = function(MC) {
 			redraw: false,
 			_visible: true,
 			z: 0,
-			onInit: function(self) {
-				//console.log('2D init', self);
+			onInit: function() {
+				//console.log('2D init', this);
 			},
-			onUpdated: function(self, sender, eventArgs) {
-				if(self.redraw && self.visible()) {
-					MC.Gfx.redrawEntity(self);
-					self.redraw = false;
+			onUpdated: function(sender, eventArgs) {
+				if(this.redraw && this.visible()) {
+					MC.Gfx.redrawEntity(this);
+					this.redraw = false;
 				}
 			},
 			show: function() {
@@ -42,43 +42,43 @@ var Components = function(MC) {
 		}, null, 'x y width height');
 
 		MC.c('Canvas', {
-			onInit: function(self) {
+			onInit: function() {
 			}
 		});
 
 		MC.c('DOM', {
 			layerIndex: 0,
 			class: '',
-			onInit: function(self) {
+			onInit: function() {
 				var element = document.createElement('div')
 				element.style.position = 'absolute';
-				self.layer = MC.Gfx.getLayer(self.layerIndex); 
-				self.layer.appendChild(element);
-				self.element = element;
-				self.setClass(self.class);
-				for(var eventID in self._handlers) {
+				this.layer = MC.Gfx.getLayer(this.layerIndex); 
+				this.layer.appendChild(element);
+				this.element = element;
+				this.setClass(this.class);
+				for(var eventID in this._handlers) {
 					if(MC.Settings.domEvents.indexOf(eventID) > -1) {
-						self.element.addEventListener(eventID, function(e) {
-							self.trigger(e.type, e);
+						this.element.addEventListener(eventID, function(e) {
+							this.trigger(e.type, e);
 						});
 					}
 				}
 			},
-			onDestroy: function(self, sender, eventArgs) {
-				self.layer.removeChild(self.element);
+			onDestroy: function(sender, eventArgs) {
+				this.layer.removeChild(this.element);
 			},
-			onUpdate: function(self, sender, eventArgs) {
+			onUpdate: function(sender, eventArgs) {
 			},
-			onDraw: function(self, sender, eventArgs) {
-				self.updatePosition();
-				if(self.element.className !== self.class) {
-					self.element.className = self.class;
+			onDraw: function(sender, eventArgs) {
+				this.updatePosition();
+				if(this.element.className !== this.class) {
+					this.element.className = this.class;
 				}
 			},
-			onEventBound: function(self, sender, eventArgs) {
+			onEventBound: function(sender, eventArgs) {
 				if(MC.Settings.domEvents.indexOf(eventArgs.eventID) > -1) {
-					self.element.addEventListener(eventArgs.eventID, function(e) {
-						self.trigger(e.type, e);
+					this.element.addEventListener(eventArgs.eventID, function(e) {
+						this.trigger(e.type, e);
 					});
 				}
 			},
@@ -102,38 +102,38 @@ var Components = function(MC) {
 
 		MC.c('Sprite', {
 			tileIndex: {x: 0, y: 0},
-			onInit: function(self) {
-				self.spriteLoaded = false;
-				if(typeof self.loadSprite === 'undefined') {
+			onInit: function() {
+				this.spriteLoaded = false;
+				if(typeof this.loadSprite === 'undefined') {
 					throw new MC.RequirementFailedError('Component requirement loadSprite not satisfied.');
 				}
 			}, 
 		}, '2D');
 
 		MC.c('Text', {
-			onInit: function(self) {
-				self.redraw = true;
+			onInit: function() {
+				this.redraw = true;
 			},
 			setText: function(text) {
-				self.text = text;
-				self.redraw = true;
+				this.text = text;
+				this.redraw = true;
 				return this;
 			}
 		}, '2D', 'text');
 
 		MC.c('DOMText', {
-			onDraw: function(self, sender, eventArgs) {
-				self.element.innerHTML = self.text;
+			onDraw: function(sender, eventArgs) {
+				this.element.innerHTML = this.text;
 			}
 		}, 'DOM Text');
 
 		MC.c('DOMSprite', {
-			onInit: function(self) {
-				self.element.style.backgroundRepeat = 'no-repeat';
-				if(typeof self.tileMap !== 'undefined') {
-					self.loadSprite(self.tileMap);
+			onInit: function() {
+				this.element.style.backgroundRepeat = 'no-repeat';
+				if(typeof this.tileMap !== 'undefined') {
+					this.loadSprite(this.tileMap);
 				}
-				self.redraw = true;
+				this.redraw = true;
 			},
 			loadSprite: function(tileMap) {
 				this.tileMap = tileMap;

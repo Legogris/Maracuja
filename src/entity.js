@@ -41,7 +41,7 @@ var Entity = function(MC) {
 		var addComponent = function(c) {
 			if(c && !this.has(c.getID())) {
 				my.components[c.getID()] = c;
-				_attach(this, c.attrs, false);
+				_attach.call(this, c.attrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
 					var com = MC.getComponent(c.ancestors[i]);
 					addComponent.call(this, com);
@@ -65,18 +65,18 @@ var Entity = function(MC) {
 		* Values with keys starting with 'on' will be bound as event handlers.
 		**/
 		var attach = function(attrs) {
-			_attach(this, attrs, true);
+			_attach.call(this, attrs, true);
 		};
 
-		var _attach = function(e, attrs, override) {
+		var _attach = function(attrs, override) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
 					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
-						e.bind(key.substring(2, key.length), attrs[key]);
+						this.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {
-						if(override || typeof e[key] === 'undefined') {
-							e[key] = attrs[key];
+						if(override || typeof this[key] === 'undefined') {
+							this[key] = attrs[key];
 						}
 					}
 				}
@@ -166,10 +166,10 @@ var Entity = function(MC) {
 			var h = my.handlers[eventID];
 			if(typeof h !== 'undefined' && h.length > 0) {
 				if(h.length === 1) {
-					h[0].callback(h[0].owner, this, eventArgs);
+					h[0].callback.call(h[0].owner, this, eventArgs);
 				} else {
 					for(var i in h) {
-						h[i].callback(h[i].owner, this, eventArgs);
+						h[i].callback.call(h[i].owner, this, eventArgs);
 					}
 				}
 			}
