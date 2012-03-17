@@ -25,10 +25,10 @@ var Entity = function(MC) {
 			if(pieces.length > 1) {
 				for(var i = 0, len = pieces.length; i < len; i++) {
 					com = MC.getComponent(pieces[i]);
-					addComponent(com);
+					addComponent.call(this, com);
 				}
 			} else {
-				addComponent(this, com);
+				addComponent.call(this, com);
 			}
 			if(typeof my.handlers['init'] !== 'undefined') {
 				my.handlers['init'].reverse(); //Usually event callbacks will be called in order of attachement - with onInit, the base ones get called first
@@ -38,17 +38,17 @@ var Entity = function(MC) {
 			return this;
 		};
 		
-		var addComponent = function(e, c) {
-			if(c && !e.has(c.getID())) {
+		var addComponent = function(c) {
+			if(c && !this.has(c.getID())) {
 				my.components[c.getID()] = c;
 				_attach(e, c.attrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
 					var com = MC.getComponent(c.ancestors[i]);
-					addComponent(e, com);
+					addComponent.call(this, com);
 				}
 				var req = c.requires;
 				for(var i = 0, l = req.length; i < l; i++) {
-					if(typeof e[req[i]] === 'undefined') {
+					if(typeof this[req[i]] === 'undefined') {
 						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
 				}
