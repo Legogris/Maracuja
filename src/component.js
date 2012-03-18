@@ -1,3 +1,16 @@
+/**@
+* #Component
+* @category Component
+* @sign public new Component()
+* @return Component
+* @param my Private properties, automatically given by Class constructor
+* @param String id ID of the component
+* @param attrs Object holding all component-specific attributes, methods and event-handlers. Names of event-handlers start with 'on' followed by the event in question.
+* @param ancestorIDs List of IDs of other components to implement as well. Attributes of ancestors get overridden if supplid by inheriting components.
+* @param requires List of attributes that need to be present in order for implementation of this component to occur. 
+* Component class, commonly called via Maracuja.c. 
+* The 'init' event will be triggered on entity-level upon implementation.
+**/
 var Component = function(MC) {
 	var constructor = function(my, id, attrs, ancestorIDs, requires) {
 		var getID = function() {

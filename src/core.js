@@ -33,6 +33,10 @@ var Maracuja = function() {
 	* @param sceneID ID of DOM element to use as scene
 	* Initializes the Maracuja framework. Needs to be called before anything else.
 	**/
+	// summary:
+	//	Initializes the Maracuja framework. Needs to be called before anything else.
+	// sceneID: Integer
+	//	 ID of DOM element to use as scene
 	var init = function(sceneID) {
 		var result = true;
 		if(!Gfx.init(sceneID)) {

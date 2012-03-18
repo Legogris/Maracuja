@@ -1,5 +1,11 @@
 var Components = function(MC) {
 	try {
+		/**@
+		* #2D
+		* @category Components, Graphics
+		* Base component needed for 2D graphics. Inherited from both DOM and Canvas components.
+		* Visible entities implementing this component are added to Maracuja's redraw handler.
+		**/
 		MC.c('2D', {
 			redraw: false,
 			_visible: true,
@@ -13,14 +19,37 @@ var Components = function(MC) {
 					this.redraw = false;
 				}
 			},
+
+			/**@
+			@comp 2D
+			@sign public this .show()
+			* Returns the entity to a visibel state. Triggers redraw.
+			*/
 			show: function() {
 				this._visible = true;
+				this.redraw = true;
 				return this;
 			},
+
+			/**@
+			@comp 2D
+			@sign public this .hide()
+			* Hides the entity. Triggers redraw.
+			*/
 			hide: function() {
 				this._visible = false;
+				this.redraw = true;
 				return this;
 			},
+
+			/**@
+			@comp 2D
+			@sign public this .show(Number x, Number y, Number z)
+			@param x X component of coordinates
+			@param y Y component of coordinates
+			@param z Z component of coordinates
+			* Moves the entity to the given coordinates. Triggers redraw.
+			*/
 			move: function(x, y, z) {
 				if(typeof x !== 'undefined')
 					this.x = x;
@@ -31,6 +60,12 @@ var Components = function(MC) {
 				this.redraw = true;
 				return this;
 			},
+
+			/**@
+			@comp 2D
+			@sign public Boolean .visible()
+			* Returns true if the entity is visible and within the bounds of the viewport. Else returns false.
+			*/
 			visible: function() {
 				if(this._visible === false) {
 					return false;
@@ -41,11 +76,24 @@ var Components = function(MC) {
 			}
 		}, null, 'x y width height');
 
+		/**@
+		* #Canvas
+		* @category Components, Graphics
+		* Base component needed for 2D Canvas graphics. Not yet implemented.
+		**/
 		MC.c('Canvas', {
 			onInit: function() {
 			}
 		});
 
+		/**@
+		* #DOM
+		* @category Components, Graphics
+		* @attr layerIndex What layer the entity belongs to. Optional. Defaults to 0.
+		* @attr class The DOM class of the entity. Optional. Defaults to nothing.
+		* @property element The DOM element representing this entity on the stage.
+		* Base component needed for 2D DOM-based graphics. Bound event-handlers that correspond with DOM events (click, mouseover, etc) will get added to the handlers of the DOM element.
+		**/
 		MC.c('DOM', {
 			layerIndex: 0,
 			class: '',
