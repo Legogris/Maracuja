@@ -33,6 +33,10 @@ var Maracuja = function() {
 	* @param sceneID ID of DOM element to use as scene
 	* Initializes the Maracuja framework. Needs to be called before anything else.
 	**/
+	// summary:
+	//	Initializes the Maracuja framework. Needs to be called before anything else.
+	// sceneID: Integer
+	//	 ID of DOM element to use as scene
 	var init = function(sceneID) {
 		var result = true;
 		if(!Gfx.init(sceneID)) {
@@ -112,10 +116,10 @@ var Maracuja = function() {
 		var h = handlers[eventID];
 		if(typeof h !== 'undefined' && h.length > 0) {
 			if(h.length === 1) {
-				h[0].callback(h[0].owner, MC, eventArgs);
+				h[0].callback.call(h[0].owner, MC, eventArgs);
 			} else {
 				for(var i in h) {
-					h[i].callback(h[i].owner, MC, eventArgs);
+					h[i].callback.call(h[i].owner, MC, eventArgs);
 				}
 			}
 		}

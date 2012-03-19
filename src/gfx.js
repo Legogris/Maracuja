@@ -74,7 +74,7 @@ var Gfx = function(MC) {
 		element.style.height = this.sceneHeight+'px';
 		element.x = viewport.x;
 		element.y = viewport.y;
-		scene.appendChild(element);
+		this.scene.appendChild(element);
 		return layerID;
 	}; 
 

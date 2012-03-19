@@ -19,26 +19,41 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 			{
 				name: 'sprite',
 				runTest: function(t) {
-					var e = MC.e('DOM', {
-						x: 20,
-						y: 40,
-						width: 16,
+					var e = MC.e('DOMSprite', {
+						x: 580,
+						y: 200,
+						width: 32,
 						height: 32,
 						tileMap: {
 							image: '/lego/maracuja/tests/mario.png',
 							tileWidth: 16,
-							tileHeight: 32
+							tileHeight: 32,
+							size: {
+								x: 6,
+								y: 1
+							}
 						},
 						tileIndex: {
-							x: 0,
+							x: 1,
 							y: 0
 						},
-						onUpdate: function(self, sender, eventArgs) {
-							self.move(self.x+1, self.y);
-							self.layer.y--;
+						onUpdate: function(sender, eventArgs) {
+							if(eventArgs.gameTime.elapsedTotal >= this.nextAnim) {
+								this.move(this.x-1, this.y);
+								//console.log(eventArgs.gameTime.elapsedTotal);
+								this.tileIndex.x = (this.tileIndex.x + 1) % 4;
+								if(this.tileIndex.x == 0) {
+									this.layer.y += 1;
+								}
+								this.reloadSprite();
+								this.nextAnim = eventArgs.gameTime.elapsedTotal + 100;
+							}
+						},
+						onInit: function() {
+							this.nextAnim = 0;
 						}
 					});
-					MC.bind('update', function(self, sender, eventArgs) {
+					MC.bind('update', function(sender, eventArgs) {
 						document.getElementById('status').innerHTML = MC.getFPS() + ' fps';
 					});
 					MC.startUpdating();

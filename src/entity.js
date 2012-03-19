@@ -1,8 +1,8 @@
 var Entity = function(MC) {
-	return function(c, attrs) {
+	var constructor = function(my, c, attrs) {
 		//Private variables
-		var components = {};
-		var handlers = {};
+		my.components = {};
+		my.handlers = {};
 
 		/**@
 		* #Entity.implement
@@ -25,30 +25,35 @@ var Entity = function(MC) {
 			if(pieces.length > 1) {
 				for(var i = 0, len = pieces.length; i < len; i++) {
 					com = MC.getComponent(pieces[i]);
-					addComponent(com);
+					addComponent.call(this, com);
 				}
-				return this;
+			} else {
+				addComponent.call(this, com);
 			}
-			return addComponent(this, com);
+			if(typeof my.handlers['init'] !== 'undefined') {
+				my.handlers['init'].reverse(); //Usually event callbacks will be called in order of attachement - with onInit, the base ones get called first
+				this.trigger('init');
+				this.unbind('init');
+			}
+			return this;
 		};
 		
-		var addComponent = function(e, c) {
-			if(c && !e.has(c.getID())) {
-				components[c.getID()] = c;
-				if(c.ancestors.length > 0) {
-					e.implement(c.ancestors);
+		var addComponent = function(c) {
+			if(c && !this.has(c.getID())) {
+				my.components[c.getID()] = c;
+				_attach.call(this, c.attrs, false);
+				for(var i = 0, l = c.ancestors.length; i < l; i++) {
+					var com = MC.getComponent(c.ancestors[i]);
+					addComponent.call(this, com);
 				}
-				e.attach(c.attrs);
 				var req = c.requires;
 				for(var i = 0, l = req.length; i < l; i++) {
-					if(typeof e[req[i]] === 'undefined') {
+					if(typeof this[req[i]] === 'undefined') {
 						throw new MC.RequirementFailedError('Component requirement ' + req[i] + ' not satisfied.');
 					}
 				}
-				e.trigger('init');
-				e.unbind('init');
 			} 
-			return e;
+			return this;
 		};
 
 		/**@
@@ -60,13 +65,19 @@ var Entity = function(MC) {
 		* Values with keys starting with 'on' will be bound as event handlers.
 		**/
 		var attach = function(attrs) {
+			_attach.call(this, attrs, true);
+		};
+
+		var _attach = function(attrs, override) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
-					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler
+					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
 						this.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {
-						this[key] = attrs[key];
+						if(override || typeof this[key] === 'undefined') {
+							this[key] = attrs[key];
+						}
 					}
 				}
 			}
@@ -81,8 +92,7 @@ var Entity = function(MC) {
 		* Checks if this entity is implementing component with supplied ID.
 		**/
 		var has = function(c) {
-			return !!components[c];
-			return this;
+			return !!my.components[c];
 		};
 
 		/**@
@@ -97,11 +107,12 @@ var Entity = function(MC) {
 		**/
 		var bind = function(eventID, handler) {
 			eventID = eventID.toLowerCase();
-			if(typeof handlers[eventID] === 'undefined') {
-				handlers[eventID] = [];
+			if(typeof my.handlers[eventID] === 'undefined') {
+				my.handlers[eventID] = [];
 			}
-			handlers[eventID].push({owner: this, callback: handler});
+			my.handlers[eventID].push({owner: this, callback: handler});
 			Maracuja.bind(eventID, handler, this);
+			this.trigger('eventBound', {eventID: eventID, callback: handler});
 			return this;
 		};
 
@@ -116,7 +127,7 @@ var Entity = function(MC) {
 		**/
 		var unbind = function(eventID, handler) {
 			eventID = eventID.toLowerCase();
-			var h = handlers[eventID];
+			var h = my.handlers[eventID];
 			if(h) {
 				if(typeof handler !== 'undefined') {
 					for(var i = 0, l = h.length; i < l; i++) {
@@ -136,7 +147,7 @@ var Entity = function(MC) {
 							Maracuja.unbind(eventID, h[i]);
 						}
 					}
-					handlers[eventID] = [];
+					my.handlers[eventID] = [];
 				}
 
 			}
@@ -152,18 +163,24 @@ var Entity = function(MC) {
 		* Triggers an event, firing all bound callbacks.
 		**/
 		var trigger = function(eventID, eventArgs) {
-			eventID = eventID.toLowerCase();
-			var h = handlers[eventID];
+			var h = my.handlers[eventID];
 			if(typeof h !== 'undefined' && h.length > 0) {
 				if(h.length === 1) {
-					h[0].callback(h[0].owner, this, eventArgs);
+					h[0].callback.call(h[0].owner, this, eventArgs);
 				} else {
 					for(var i in h) {
-						h[i].callback(h[i].owner, this, eventArgs);
+						h[i].callback.call(h[i].owner, this, eventArgs);
 					}
 				}
 			}
 			return this;
+		};
+
+		var destroy = function() {
+			this.trigger('destroy');
+			for(var eventID in my.handlers) {
+				this.unbind(eventID);
+			}
 		};
 
 		this.has = has;
@@ -172,10 +189,13 @@ var Entity = function(MC) {
 		this.unbind = unbind;
 		this.trigger = trigger;
 		this.attach = attach;
+		this.destroy = destroy;
 
 		//ACTUAL CONSTRUCTOR
 		this.attach(attrs);
 		this.implement(c);
 		return this;
 	};
+	var c = Class(constructor, ['handlers']);
+	return c;
 }(Maracuja);
