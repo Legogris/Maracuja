@@ -12,23 +12,26 @@ var Class = function() {
 	return function(constructor, getters, setters) {
 		var getProperties = function(my) {
 			var properties = {};
+			var i;
+			var key;
 			var g = function(key) { 
 				return function() { return my[key]; };
 			};
 			var s = function(key) {
 				return function(value) { my[key] = value; };
 			};
-			for(var i in getters) {
-				var key = getters[i];
+			for(i in getters) {
+				key = getters[i];
 				properties[key] = { get: g(key) };
 			}
-			for(var i in setters) {
-				var key = setters[i];
+			for(i in setters) {
+				key = setters[i];
 				if(typeof properties[key] === 'undefined') {
 					properties[key] = {};
 				}
 				properties[key].set = s(key);
 			}
+			key = null;
 			return properties;
 		}; 
 		
