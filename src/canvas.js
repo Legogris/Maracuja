@@ -1,18 +1,21 @@
-/* Maracuja.Gfx.Canvas */
+/**
+* Canvas side of Gfx
+* @namespace MC.Gfx
+* @class Canvas
+* @static
+*/
 var Canvas = function(MC) {
 	var Gfx = MC.Gfx;
 	var gameTime = undefined;
 	var entities = [];
 	var changed;
 	
-	/**@
-	* #Maracuja.Gfx.Canvas.init
-	* @category Gfx, Canvas
-	* @sign public bool Maracuja.Gfx.Canvas.init()
-	* @param canvas Canvas element to use. (optional)
-	* @return Success
+	/**
 	* Initializes canvas. Needs to be done between Maracuja.Gfx.init and any drawing involving the canvas.
 	* If canvas parameter is omitted, a new canvas will be created as a child for the intialized scene.
+	* @method init
+	* @param {DOMElement} canvas Canvas element to use. (optional)
+	* @return {Boolean} Success
 	**/
 	var init = function(canvas) {
 		if(!Gfx.scene) {
@@ -40,13 +43,11 @@ var Canvas = function(MC) {
 		console.log("Canvas update not implemented");
 	}
 	
-	/**@
-	* #Maracuja.Gfx.Canvas.background
-	* @category Gfx, Canvas
-	* @sign public String Maracuja.Gfx.Canvas.background(String value)
-	* @param value Background color or image. (optional)
-	* @return Canvas background color
+	/**
 	* Shorthand for setting canvas background
+	* @method background
+	* @param {String} value Background color or image. (optional)
+	* @return {String} Canvas background color
 	**/	
 	var background = function(value) {
 		if(value !== undefined) {
