@@ -1,4 +1,9 @@
-/* Maracuja.Gfx */
+/**
+* gfx
+* @namespace MC
+* @class Gfx
+* @static
+*/
 var Gfx = function(MC) {
 	var layers = [];
 	var redrawEntities = [];	//DOM Entities that were modified during this frame and need to be redrawn
@@ -10,15 +15,14 @@ var Gfx = function(MC) {
 		height: undefined
 	};
 
-	/**@
-	* #Maracuja.Gfx.init
-	* @category Gfx
-	* @sign public bool Maracuja.Gfx.init(String SceneID)
-	* @param sceneID The element of the DOM ID to use as scene
-	* @param attrs Additional attributes to apply to scene DOM elements style (optional)
-	* @return Success
+	/**
 	* Initializes the scene. Must be run before any other Gfx functions are used.
 	* Special attributes: height and width. If these are not supplied, Maracuja will try to use the elements existing offset values.
+	* #sign public bool Maracuja.Gfx.init(String SceneID)
+	* @method init
+	* @param sceneID The element of the DOM ID to use as scene
+	* @param attrs Additional attributes to apply to scene DOM elements style (optional)
+	* @return {Boolean} Success
 	**/
 	var init = function(sceneID, attrs) {
 		if(sceneID === undefined) {
@@ -82,12 +86,13 @@ var Gfx = function(MC) {
 		return layers[id];
 	}; 
 
-	/**@
+	/**
+	* Gets called each frame to update all entities and draw those that should be drawn
 	* #Maracuja.Gfx.update
-	* @category Gfx
-	* @sign public void Maracuja.Gfx.update(float gameTime)
+	* #category Gfx
+	* #sign public void Maracuja.Gfx.update(float gameTime)
+	* @method update
 	* @param gameTime Dictionary holding time values
-	* Method that gets called each frame to update all entities and draw those that should be
 	**/
 	var update = function(_gameTime) {
 		gameTime = _gameTime;
@@ -100,25 +105,23 @@ var Gfx = function(MC) {
 		}
 	}
 
-	/**@
-	* #Maracuja.Gfx.redrawEntity
-	* @category Gfx
-	* @sign public void Maracuja.Gfx.redrawEntity(Entity e)
-	* @param value Entity Entity to redraw
+	/**
 	* Tells the updater to queue this entity for redrawing next update
+	* # sign public void Maracuja.Gfx.redrawEntity(Entity e)
+	* @method redrawEntity
+	* @param value Entity Entity to redraw
 	**/
 	var redrawEntity = function(e) {
 		redrawEntities.push(e);
 	};
 
 	
-	/**@
-	* #Maracuja.Gfx.background
-	* @category Gfx
-	* @sign public String Maracuja.Gfx.background(String value)
-	* @param value Background color or image. (optional)
-	* @return Scene background value
+	/**
 	* Setting or getting scene background
+	* #sign public String Maracuja.Gfx.background(String value)
+	* @method background
+	* @param value Background color or image. (optional)
+	* @return {String} Scene background value
 	**/
 	var background = function(value) {
 		if(value !== undefined) {

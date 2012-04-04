@@ -1,10 +1,20 @@
+/**
+ * Entity class, commonly initiated via Maracuja.e. Actual constructor private.
+ * @module maracuja 
+ * @namespace
+ * @class Entity
+ * @constructor
+ * @param {Object} my Private variables
+ * @param {String|Array} c Component(s) to implement, as array or space-separated list in string
+ * @param {Object} attrs Values for attributes
+ */
 var Entity = function(MC) {
 	var constructor = function(my, c, attrs) {
 		//Private variables
 		my.components = {};
 		my.handlers = {};
 
-		/**@
+		/**
 		* #Entity.implement
 		* @category Core
 		* @sign public void Entity.implement(c)

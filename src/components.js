@@ -1,10 +1,16 @@
+/**
+* Built-in components
+* @module maracuja
+* @submodule components
+*/
 var Components = function(MC) {
 	try {
-		/**@
-		* #2D
-		* @category Components, Graphics
-		* Base component needed for 2D graphics. Inherited from both DOM and Canvas components.
+		/**
+		* Bases component needed for 2D graphics. Inherited from both DOM and Canvas components.
 		* Visible entities implementing this component are added to Maracuja's redraw handler.
+		* Requires attributes: width, height, x, y
+		* @class 2D
+		* @namespace MC.Components
 		**/
 		MC.c('2D', {
 			redraw: false,
@@ -20,10 +26,9 @@ var Components = function(MC) {
 				}
 			},
 
-			/**@
-			@comp 2D
-			@sign public this .show()
-			* Returns the entity to a visibel state. Triggers redraw.
+			/**
+			* Returns the entity to a visible state. Triggers redraw.
+			* @method show
 			*/
 			show: function() {
 				this._visible = true;
@@ -31,10 +36,9 @@ var Components = function(MC) {
 				return this;
 			},
 
-			/**@
-			@comp 2D
-			@sign public this .hide()
+			/**
 			* Hides the entity. Triggers redraw.
+			* @method hide
 			*/
 			hide: function() {
 				this._visible = false;
@@ -42,13 +46,13 @@ var Components = function(MC) {
 				return this;
 			},
 
-			/**@
-			@comp 2D
-			@sign public this .show(Number x, Number y, Number z)
-			@param x X component of coordinates
-			@param y Y component of coordinates
-			@param z Z component of coordinates
+			/**
 			* Moves the entity to the given coordinates. Triggers redraw.
+			*
+			* @method move
+			* @param {Number} x X component of coordinates
+			* @param {Number} y Y component of coordinates
+			* @param {Number} z Z component of coordinates
 			*/
 			move: function(x, y, z) {
 				if(typeof x !== 'undefined')
@@ -61,10 +65,10 @@ var Components = function(MC) {
 				return this;
 			},
 
-			/**@
-			@comp 2D
-			@sign public Boolean .visible()
+			/**
 			* Returns true if the entity is visible and within the bounds of the viewport. Else returns false.
+			* @method visible
+			* @return {Boolean} True if the entity is visible and within the bounds of the viewport. Else returns false.
 			*/
 			visible: function() {
 				if(this._visible === false) {
@@ -76,26 +80,46 @@ var Components = function(MC) {
 			}
 		}, null, 'x y width height');
 
-		/**@
-		* #Canvas
-		* @category Components, Graphics
+		/**
 		* Base component needed for 2D Canvas graphics. Not yet implemented.
+		*
+		* @class Canvas
+		* @namespace MC.Components
 		**/
 		MC.c('Canvas', {
 			onInit: function() {
 			}
 		});
 
-		/**@
-		* #DOM
-		* @category Components, Graphics
-		* @attr layerIndex What layer the entity belongs to. Optional. Defaults to 0.
-		* @attr class The DOM class of the entity. Optional. Defaults to nothing.
-		* @property element The DOM element representing this entity on the stage.
+		/**
 		* Base component needed for 2D DOM-based graphics. Bound event-handlers that correspond with DOM events (click, mouseover, etc) will get added to the handlers of the DOM element.
+		*
+		* @class DOM
+		* @namespace MC.Components
+		* @uses MC.Components.2D
 		**/
 		MC.c('DOM', {
+			/**
+			* The associated DOM element
+			* @type {Object}
+			* @property element
+			* @protected 
+			*/
+			/**
+			* The ID of the layer that the entity belongs to. Layers are used for scrolling etc. 
+			* Only set on init.
+			* @type {Integer}
+			* @property layerIndex
+			* @default 0
+			*/
 			layerIndex: 0,
+			/**
+			* The DOM class of the associated DOM element.
+			* Only set on init.
+			* @type {String}
+			* @property class
+			* @default ''
+			*/
 			class: '',
 			onInit: function() {
 				var element = document.createElement('div')
@@ -111,7 +135,7 @@ var Components = function(MC) {
 						});
 					}
 				}
-			},
+			},			
 			onDestroy: function(sender, eventArgs) {
 				this.layer.removeChild(this.element);
 			},
@@ -130,11 +154,26 @@ var Components = function(MC) {
 					});
 				}
 			},
+			/**
+			* Sets the DOM class of the entity's DOM object.
+			* @method setClass
+			* @param {String} cssClass Class to set
+			* @return {Entity}
+			*/
 			setClass: function(cssClass) {
+				var redraw = this.class === cssClass;
 				this.class = cssClass;
-				this.redraw = true;
+				if(redraw) {
+					this.redraw = true;
+				}
 				return this;
 			},
+			/**
+			* Updates the position of the DOM element
+			* @method updatePosition
+			* @private
+			* @return {Entity}
+			*/
 			updatePosition: function() {
 				if(this.visible()) {
 					this.element.style.display = 'block';
@@ -147,8 +186,22 @@ var Components = function(MC) {
 				return this;
 			},
 		}, '2D');
-
+		
+		/**
+		* 
+		* Sprite component. Requires function loadSprite.
+		* 
+		* @class Sprite
+		* @namespace MC.Components
+		* @uses MC.Components.2D
+		*/
 		MC.c('Sprite', {
+			/**
+			* Position of current tile in map to display
+			* {x: Integer, y: Integer}
+			* @type {Object}
+			* @property tileIndex 
+			*/
 			tileIndex: {x: 0, y: 0},
 			onInit: function() {
 				this.spriteLoaded = false;
@@ -158,23 +211,57 @@ var Components = function(MC) {
 			}, 
 		}, '2D');
 
+		/**
+		* 
+		* Text component
+		* Requires: text
+		* 
+		* @class Text
+		* @namespace MC.Components
+		* @uses MC.Components.2D
+		*/
 		MC.c('Text', {
 			onInit: function() {
 				this.redraw = true;
 			},
+			/**
+			* Sets the text to display
+			* @method setText
+			*/ 
 			setText: function(text) {
+				var redraw = this.text === text;
 				this.text = text;
-				this.redraw = true;
+				if(redraw) {
+					this.redraw = true;
+				}
 				return this;
 			}
 		}, '2D', 'text');
 
+		/**
+		* 
+		* DOM-based text component
+		* 
+		* @class DOMText
+		* @namespace MC.Components
+		* @uses MC.Components.DOM
+		* @uses MC.Components.Text
+		*/
 		MC.c('DOMText', {
 			onDraw: function(sender, eventArgs) {
 				this.element.innerHTML = this.text;
 			}
 		}, 'DOM Text');
 
+		/**
+		* 
+		* DOM-based sprite component
+		* 
+		* @class DOMSprite
+		* @namespace MC.Components
+		* @uses MC.Components.DOM
+		* @uses MC.Components.Sprite
+		*/
 		MC.c('DOMSprite', {
 			onInit: function() {
 				this.element.style.backgroundRepeat = 'no-repeat';
@@ -183,6 +270,17 @@ var Components = function(MC) {
 				}
 				this.redraw = true;
 			},
+			/**
+			* Loads the associated tilemap.
+			* tilemap: {
+			*  image: {String}, (URL of tilemap image)
+			*  size: {
+			* 		x: {Integer},
+			* 		y: {Integer}
+			*  }
+			* }
+			* @method loadSprite
+			*/ 
 			loadSprite: function(tileMap) {
 				this.tileMap = tileMap;
 				this.element.style.width = this.width + 'px';
