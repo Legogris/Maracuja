@@ -38,6 +38,7 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					doh.is(30, e.baseVar);
 					e.implement('c3');
 					doh.t(e.has('c3'));
+					doh.is(55, e.getPrivateVar());
 					doh.is(62, e.testVar);
 					doh.is(30, e.baseVar);
 				}
@@ -87,6 +88,7 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					eventVar: 0,
 					onInit: function() {
 							console.log('c1 init');
+							my.privateVar = 55;
 					},
 					onFlip: function(sender) {
 						//console.log('c1 onFlip', sender);
@@ -116,6 +118,8 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 					onFlip: function(sender) {
 						//console.log('c3 onFlip', sender);
 						this.eventVar += 10;
+					}, getPrivateVar: function() {
+						return my.privateVar;
 					}
 				}
 			}, 'c1');
