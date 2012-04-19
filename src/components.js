@@ -323,25 +323,25 @@ var Components = function(MC) {
 				}
 			};
 		}, 'Sprite DOM');
-//frequency: {Integer}, How many milliseconds between animation frames
 		/**
 		*
 		* Animation component
 		* 
 		* Requires animations
-		* animations: [
-		*  [
-		*   start: {
-		*    x: {Integer},
-		*    y: {Integer}
-		*   },
-		*   end: {
-		*    x: {Integer},
-		*    y: {Integer}
-		*   },
-		*   name: {String}
-		*  ]
-		* ]
+		* animations: {
+		*  {String} : ID
+		*   { 
+		*    start: {
+		*     x: {Integer},
+		*     y: {Integer}
+		*    },
+		*    end: {
+		*     x: {Integer},
+		*     y: {Integer}
+		*    },
+		*    direction (optional, defaults to x): {String, x|y}
+		*  }
+		* }
 		* 
 		* @class Animation
 		* @namespace MC.Components
@@ -351,8 +351,13 @@ var Components = function(MC) {
 			return {
 				onInit: function() {},
 				onUpdate: function(sender, eventArgs) {
+
 				},
-				startAnimation: function(name) {},
+				//interval: {Integer}, How many milliseconds between animation frames
+				startAnimation: function(name, interval) {
+					my.nextAnimationFrame = 0;
+					if(name)
+				},
 				stopAnimation: function(name) {}
 			};
 		}, 'Sprite', 'animations');
