@@ -15,12 +15,11 @@ var Entity = function(MC) {
 		my.handlers = {};
 
 		/**
-		* #Entity.implement
-		* @category Core
-		* @sign public void Entity.implement(c)
-		* @param c Component ID(s) to implement, in space-separated string or array of strings
 		* Implements additional components to already initialized entity.
 		* Some components require certain attributes to be attached before implementation.
+		* 
+		* @method implement
+		* @param {String|Array} c Component ID(s) to implement, in space-separated string or array of strings.
 		**/
 		var implement = function(c) {
 			var pieces;
@@ -79,13 +78,10 @@ var Entity = function(MC) {
 			return this;
 		};
 
-		/**@
-		* #Entity.attach
-		* @category Core
-		* @sign public void Entity.attach(attrs)
-		* @param attrs Dictionary with attributes to attach
+		/**
 		* Attaches new properties and their values to the entity.
-		* Values with keys starting with 'on' will be bound as event handlers.
+		* @method attach
+		* @param attrs Dictionary with attributes to attach. Values with keys starting with 'on' will be bound as event handlers.
 		**/
 		var attach = function(attrs) {
 			_attach.call(this, attrs, true);
@@ -94,7 +90,7 @@ var Entity = function(MC) {
 		var _attach = function(attrs, override) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
-					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
+					if(key.substring(0, 2) === 'on') { //Starts with 'on', e.g. is an event handler.
 						this.bind(key.substring(2, key.length), attrs[key]);
 					}
 					else {
@@ -106,49 +102,50 @@ var Entity = function(MC) {
 			}
 		};
 
-		/**@
-		* #Entity.has
-		* @category Core
-		* @sign public void Entity.has(c)
-		* @param c Component ID to check
-		* @returns True if supplied component is implemented, False otherwise.
+		/**
 		* Checks if this entity is implementing component with supplied ID.
+		* 
+		* @method has
+		* @param {String} c Component ID to check
+		* @return {Boolean} True if supplied component is implemented, False otherwise.
 		**/
 		var has = function(c) {
 			return !!my.components[c];
 		};
 
-		/**@
-		* #Entity.bind
-		* @category Core
-		* @sign public void Entity.bind(eventID, handler)
-		* @param eventID Event to bind to
-		* @param handler Callback to fire when event is triggered.
+		/**
 		* Binds a new callback to an event.
-		* Callback gets called both when event is triggered on this entity, as well as globally on the Maracuja object.
-		* Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
+		*
+		* @method bind
+		* @param {String} eventID Event to bind to
+		* @param {function} handler Callback to fire when event is triggered. Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
+		* @param {Boolean} global If this is true, the event handler is also attached to the same event on the global Maracuja object. Defaults to true.
 		**/
-		var bind = function(eventID, handler) {
+		var bind = function(eventID, handler, global) {
+			if(global === undefined) { global = true; }
 			eventID = eventID.toLowerCase();
 			if(typeof my.handlers[eventID] === 'undefined') {
 				my.handlers[eventID] = [];
 			}
 			my.handlers[eventID].push({owner: this, callback: handler});
-			Maracuja.bind(eventID, handler, this);
+			if(global && eventID !== 'init') {
+				Maracuja.bind(eventID, handler, this);
+			}
 			this.trigger('eventBound', {eventID: eventID, callback: handler});
 			return this;
 		};
 
-		/**@
-		* #Entity.unbind
-		* @category Core
-		* @sign public void Entity.unbind(eventID, handler)
-		* @param eventID Event to unbind
-		* @param handler Callback to unbind. optional
+		/**
 		* Unbinds a previously bound callback from an event, both from current entity and globally.
 		* If handler parameter is not supplied, all attached callbacks to the given event will be unbound.
+		* 
+		* @method unbind
+		* @param {String} eventID Event to unbind
+		* @param {function} handler Callback to unbind. optional
+		* @param {Boolean} global If this is true, the event handler is also unbound from the global Maracuja object. Defaults to true.
 		**/
-		var unbind = function(eventID, handler) {
+		var unbind = function(eventID, handler, global) {
+			if(global === undefined) { global = true; }
 			eventID = eventID.toLowerCase();
 			var h = my.handlers[eventID];
 			if(h) {
@@ -160,14 +157,20 @@ var Entity = function(MC) {
 							l--;
 						}
 					}
-					Maracuja.unbind(eventID, handler);
+					if(global && eventID !== 'init') {
+						Maracuja.unbind(eventID, handler);
+					}
 				} else { //unbind all handlers
 					//Optimize for case when there is only one callback
 					if(h.length === 1) {
-						Maracuja.unbind(eventID, h[0]);						
+						if(global && eventID !== 'init') {
+							Maracuja.unbind(eventID, h[0]);	
+						}					
 					} else {
 						for(var i = 0, l = h.length; i < l; i++) {
-							Maracuja.unbind(eventID, h[i]);
+							if(global && eventID !== 'init') {
+								Maracuja.unbind(eventID, h[i]);
+							}
 						}
 					}
 					my.handlers[eventID] = [];
@@ -176,13 +179,12 @@ var Entity = function(MC) {
 			return this;
 		};
 
-		/**@
-		* #Entity.trigger
-		* @category Core
-		* @sign public void Entity.trigger(eventID, eventArgs)
-		* @param eventID Event to trigger
-		* @param eventArgs Object with additional data to send to callback.
+		/**
 		* Triggers an event, firing all bound callbacks.
+		* 
+		* @method trigger
+		* @param {String} eventID Event to trigger
+		* @param eventArgs Object with additional data to send to callback.
 		**/
 		var trigger = function(eventID, eventArgs) {
 			var h = my.handlers[eventID];
@@ -206,6 +208,11 @@ var Entity = function(MC) {
 			return this;
 		};
 
+		/**
+		* Destroys the entity and unbinds all associated events.
+		* 
+		* @method destroy
+		**/
 		var destroy = function() {
 			this.trigger('destroy');
 			for(var eventID in my.handlers) {
