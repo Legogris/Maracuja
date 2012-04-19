@@ -6,18 +6,18 @@
  * @constructor
  * @param {Object} my Private properties, automatically given by Class constructor
  * @param {String} id ID of the component
- * @param {Object} attrs Object holding all component-specific attributes, methods and event-handlers. Names of event-handlers start with 'on' followed by the event in question.
+ * @param {Function} creator Function that returns object holding all component-specific attributes, methods and event-handlers. Names of event-handlers start with 'on' followed by the event in question. First argument is always the private properties of the entity.
  * @param {String|Array} ancestorIDs Space-separated list string or array of IDs of other components to implement as well. Attributes of ancestors get overridden if supplid by inheriting components.
  * @param {String|Array} requires Space-separated list string or array of attributes that need to be present in order for implementation of this component to occur. 
  */
 var Component = function(MC) {
-	var constructor = function(my, id, attrs, ancestorIDs, requires) {
+	var constructor = function(my, id, creator, ancestorIDs, requires) {
 		var getID = function() {
 			return my.id;
 		};
 		
 		my.id = id;
-		my.attrs = attrs;
+		my.creator = creator;
 		my.requires = [];
 		my.ancestors = [];
 
@@ -40,6 +40,6 @@ var Component = function(MC) {
 		this.getID = getID;
 	};
 
-	var c = Class(constructor, ['ancestors', 'attrs', 'requires']);
+	var c = Class(constructor, ['ancestors', 'creator', 'requires']);
 	return c;
 }(Maracuja);

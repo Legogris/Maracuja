@@ -50,8 +50,9 @@ var Entity = function(MC) {
 		
 		var addComponent = function(c) {
 			if(c && !this.has(c.getID())) {
+				var cAttrs = c.creator(my);
 				my.components[c.getID()] = c;
-				_attach.call(this, c.attrs, false);
+				_attach.call(this, cAttrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
 					var com = MC.getComponent(c.ancestors[i]);
 					addComponent.call(this, com);

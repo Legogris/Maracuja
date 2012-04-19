@@ -80,44 +80,52 @@ require(['doh/runner', 'maracuja', 'dojo/domReady!'], function(doh, MC) {
 			}
 		], function() {
 			testVar = 0;
-			MC.c('c1', {
-				testVar: 20,
-				baseVar: 30,
-				eventVar: 0,
-				onInit: function() {
-						console.log('c1 init');
-				},
-				onFlip: function(sender) {
-					//console.log('c1 onFlip', sender);
-					this.eventVar += 100;
+			MC.c('c1', function(my) {
+				return {
+					testVar: 20,
+					baseVar: 30,
+					eventVar: 0,
+					onInit: function() {
+							console.log('c1 init');
+					},
+					onFlip: function(sender) {
+						//console.log('c1 onFlip', sender);
+						this.eventVar += 100;
+					}
 				}
 			});
-			MC.c('c2', {
-				onInit: function() {
-					console.log('c2 init');
-					this.testVar += 40;
-				},
-				onFlip: function(sender) {
-					//console.log('c2 onFlip', sender);
-					this.eventVar += 2;
+			MC.c('c2', function(my) {
+				return {
+					onInit: function() {
+						console.log('c2 init');
+						this.testVar += 40;
+					},
+					onFlip: function(sender) {
+						//console.log('c2 onFlip', sender);
+						this.eventVar += 2;
+					}
 				}
 			}, 'c1');
-			MC.c('c3', {
-				baseVar: 1,
-				onInit: function() {
-					this.testVar += 2;
-					console.log('c3 init');
-				},
-				onFlip: function(sender) {
-					//console.log('c3 onFlip', sender);
-					this.eventVar += 10;
+			MC.c('c3', function(my) {
+				return {
+					baseVar: 1,
+					onInit: function() {
+						this.testVar += 2;
+						console.log('c3 init');
+					},
+					onFlip: function(sender) {
+						//console.log('c3 onFlip', sender);
+						this.eventVar += 10;
+					}
 				}
 			}, 'c1');
-			MC.c('picky', {
-				onInit: function() {
-					this.thisToo += 10;
-				},
-				wants: 'has',
+			MC.c('picky', function(my) {
+				return {
+					onInit: function() {
+						this.thisToo += 10;
+					},
+					wants: 'has',
+				}
 			}, 'c1', 'testVar wants thisToo');
 		},
 		function() {});
