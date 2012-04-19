@@ -14,16 +14,24 @@ var Components = function(MC) {
 		**/
 		MC.c('2D', function(my) {
 			return {
-				redraw: false,
-				_visible: true,
+				/**
+				* The ID of the layer that the entity belongs to. Layers are used for scrolling etc. 
+				* Only set on init.
+				* @type {Integer}
+				* @property layerIndex
+				* @default 0
+				*/
 				z: 0,
 				onInit: function() {
-					//console.log('2D init', this);
+					console.log('2D init');
+					my.visible = true;
+					my.redraw = false;
+					my.layerIndex = this.layerIndex || 0;
 				},
 				onUpdated: function(sender, eventArgs) {
-					if(this.redraw && this.visible()) {
+					if(my.redraw && this.visible()) {
 						MC.Gfx.redrawEntity(this);
-						this.redraw = false;
+						my.redraw = false;
 					}
 				},
 
@@ -32,8 +40,8 @@ var Components = function(MC) {
 				* @method show
 				*/
 				show: function() {
-					this._visible = true;
-					this.redraw = true;
+					my.visible = true;
+					my.redraw = true;
 					return this;
 				},
 
@@ -42,8 +50,8 @@ var Components = function(MC) {
 				* @method hide
 				*/
 				hide: function() {
-					this._visible = false;
-					this.redraw = true;
+					my.visible = false;
+					my.redraw = true;
 					return this;
 				},
 
@@ -62,7 +70,7 @@ var Components = function(MC) {
 						this.y = y;
 					if(typeof z !== 'undefined')
 						this.z = z;
-					this.redraw = true;
+					my.redraw = true;
 					return this;
 				},
 
@@ -72,14 +80,14 @@ var Components = function(MC) {
 				* @return {Boolean} True if the entity is visible and within the bounds of the viewport. Else returns false.
 				*/
 				visible: function() {
-					if(this._visible === false) {
+					if(my.visible === false) {
 						return false;
 					}
 					var side = Math.max(this.width, this.height); //To make sure we always stay inside even at rotation
 					return this.x + side >= this.layer.x && this.x < this.layer.x + this.layer.width &&
 						this.y + side >= this.layer.y && this.y < this.layer.y + this.layer.height;
 				}
-			}
+			};
 		}, null, 'x y width height');
 
 		/**
@@ -111,14 +119,6 @@ var Components = function(MC) {
 				* @protected 
 				*/
 				/**
-				* The ID of the layer that the entity belongs to. Layers are used for scrolling etc. 
-				* Only set on init.
-				* @type {Integer}
-				* @property layerIndex
-				* @default 0
-				*/
-				layerIndex: 0,
-				/**
 				* The DOM class of the associated DOM element.
 				* Only set on init.
 				* @type {String}
@@ -127,34 +127,34 @@ var Components = function(MC) {
 				*/
 				class: '',
 				onInit: function() {
-					var element = document.createElement('div')
-					element.style.position = 'absolute';
-					this.layer = MC.Gfx.getLayer(this.layerIndex); 
-					this.layer.appendChild(element);
-					this.element = element;
+					console.log('DOM init');
+					my.element = document.createElement('div')
+					my.element.style.position = 'absolute';
+					this.layer = MC.Gfx.getLayer(my.layerIndex); 
+					this.layer.appendChild(my.element);
 					this.setClass(this.class);
 					for(var eventID in this._handlers) {
 						if(MC.Settings.domEvents.indexOf(eventID) > -1) {
-							this.element.addEventListener(eventID, function(e) {
+							my.element.addEventListener(eventID, function(e) {
 								this.trigger(e.type, e);
 							});
 						}
 					}
 				},			
 				onDestroy: function(sender, eventArgs) {
-					this.layer.removeChild(this.element);
+					this.layer.removeChild(my.element);
 				},
 				onUpdate: function(sender, eventArgs) {
 				},
 				onDraw: function(sender, eventArgs) {
 					this.updatePosition();
-					if(this.element.className !== this.class) {
-						this.element.className = this.class;
+					if(my.element.className !== this.class) {
+						my.element.className = this.class;
 					}
 				},
 				onEventBound: function(sender, eventArgs) {
 					if(MC.Settings.domEvents.indexOf(eventArgs.eventID) > -1) {
-						this.element.addEventListener(eventArgs.eventID, function(e) {
+						my.element.addEventListener(eventArgs.eventID, function(e) {
 							this.trigger(e.type, e);
 						});
 					}
@@ -169,7 +169,7 @@ var Components = function(MC) {
 					var redraw = this.class === cssClass;
 					this.class = cssClass;
 					if(redraw) {
-						this.redraw = true;
+						my.redraw = true;
 					}
 					return this;
 				},
@@ -181,12 +181,12 @@ var Components = function(MC) {
 				*/
 				updatePosition: function() {
 					if(this.visible()) {
-						this.element.style.display = 'block';
-						this.element.style.left = (this.x - this.layer.x) + 'px'; 
-						this.element.style.top = (this.y - this.layer.y) + 'px'; 
-						this.element.style.zIndex = this.z;
+						my.element.style.display = 'block';
+						my.element.style.left = (this.x - this.layer.x) + 'px'; 
+						my.element.style.top = (this.y - this.layer.y) + 'px'; 
+						my.element.style.zIndex = this.z;
 					} else {
-						this.element.style.display = 'none';
+						my.element.style.display = 'none';
 					}
 					return this;
 				},
@@ -212,6 +212,7 @@ var Components = function(MC) {
 				*/
 				tileIndex: {x: 0, y: 0},
 				onInit: function() {
+					console.log('Sprite init');
 					this.spriteLoaded = false;
 					if(typeof this.loadSprite === 'undefined') {
 						throw new MC.RequirementFailedError('Component requirement loadSprite not satisfied.');
@@ -256,7 +257,7 @@ var Components = function(MC) {
 		MC.c('Text', function(my) {
 			return {
 				onInit: function() {
-					this.redraw = true;
+					my.redraw = true;
 				},
 				/**
 				* Sets the text to display
@@ -266,7 +267,7 @@ var Components = function(MC) {
 					var redraw = this.text === text;
 					this.text = text;
 					if(redraw) {
-						this.redraw = true;
+						my.redraw = true;
 					}
 					return this;
 				}
@@ -285,7 +286,7 @@ var Components = function(MC) {
 		MC.c('DOMText', function(my) {
 			return {
 				onDraw: function(sender, eventArgs) {
-					this.element.innerHTML = this.text;
+					my.element.innerHTML = this.text;
 				}
 			};
 		}, 'Text DOM');
@@ -302,20 +303,21 @@ var Components = function(MC) {
 		MC.c('DOMSprite', function(my) {
 			return {
 				onInit: function() {
-					this.element.style.backgroundRepeat = 'no-repeat';
-					this.redraw = true;
+					console.log('DOMSprite init');
+					my.element.style.backgroundRepeat = 'no-repeat';
+					my.redraw = true;
 				},
 				loadSprite: function(tileMap) {
 					this.tileMap = tileMap;
-					this.element.style.width = this.width + 'px';
-					this.element.style.height = this.height + 'px';
-					this.element.style.backgroundImage = "url('"+this.tileMap.image+"')";
-					this.element.style.backgroundSize = this.width*this.tileMap.size.x+'px ' + this.height*this.tileMap.size.y+'px';
+					my.element.style.width = this.width + 'px';
+					my.element.style.height = this.height + 'px';
+					my.element.style.backgroundImage = "url('"+this.tileMap.image+"')";
+					my.element.style.backgroundSize = this.width*this.tileMap.size.x+'px ' + this.height*this.tileMap.size.y+'px';
 					if(typeof this.tileIndex !== 'undefined') {
-						this.element.style.backgroundPosition = -(this.tileIndex.x*this.width)+'px ' + (this.tileIndex.y*this.height)+'px';
+						my.element.style.backgroundPosition = -(this.tileIndex.x*this.width)+'px ' + (this.tileIndex.y*this.height)+'px';
 					}
 					this.updatePosition();
-					this.redraw = true;
+					my.redraw = true;
 					this.spriteLoaded = true;
 					return this;
 				}

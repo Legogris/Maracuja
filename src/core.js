@@ -115,8 +115,16 @@ var Maracuja = function() {
 			if(h.length === 1) {
 				h[0].callback.call(h[0].owner, MC, eventArgs);
 			} else {
-				for(var i in h) {
-					h[i].callback.call(h[i].owner, MC, eventArgs);
+				for(var i in h) { //See trigger in entity.js for comment
+					try {
+						h[i].callback.call(h[i].owner, MC, eventArgs);
+					} catch(e) {
+						if(console && console.error) {
+							console.error(e);
+						} else {
+							window.setTimeout(function() {throw e}, 0);
+						}
+					}
 				}
 			}
 		}

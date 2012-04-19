@@ -50,12 +50,24 @@ var Entity = function(MC) {
 		
 		var addComponent = function(c) {
 			if(c && !this.has(c.getID())) {
-				var cAttrs = c.creator(my);
+				var cAttrs = c.getAttributes(my);
 				my.components[c.getID()] = c;
 				_attach.call(this, cAttrs, false);
 				for(var i = 0, l = c.ancestors.length; i < l; i++) {
-					var com = MC.getComponent(c.ancestors[i]);
-					addComponent.call(this, com);
+					var aID = c.ancestors[i];
+					var com = MC.getComponent(aID);
+					if(this.has(aID)) { //rebind oninit to make it happen before this one
+						var handlers = my.handlers['init'];
+						for(var i in handlers) {
+							var h = handlers[i];
+							if(h.callback.component === aID) {
+								this.unbind('init', h.callback);
+								this.bind('init', h.callback);
+							}
+						}
+					} else {
+						addComponent.call(this, com);
+					}
 				}
 				var req = c.requires;
 				for(var i = 0, l = req.length; i < l; i++) {
@@ -142,7 +154,7 @@ var Entity = function(MC) {
 			if(h) {
 				if(typeof handler !== 'undefined') {
 					for(var i = 0, l = h.length; i < l; i++) {
-						if(h[i].callback == handler) {
+						if(h[i].callback === handler) {
 							h.splice(i, 1);
 							i--;
 							l--;
@@ -160,7 +172,6 @@ var Entity = function(MC) {
 					}
 					my.handlers[eventID] = [];
 				}
-
 			}
 			return this;
 		};
@@ -179,8 +190,16 @@ var Entity = function(MC) {
 				if(h.length === 1) {
 					h[0].callback.call(h[0].owner, this, eventArgs);
 				} else {
-					for(var i in h) {
-						h[i].callback.call(h[i].owner, this, eventArgs);
+					for(var i in h) {	//Loops through callbacks
+						try {
+							h[i].callback.call(h[i].owner, this, eventArgs);
+						} catch(e) {	//On error, logs to console or throws an error in a separate 'thread' to not cancel remaining callbacks
+							if(console && console.error) {
+								console.error(e)
+							} else {
+								window.setTimeout(function() {throw e}, 0);
+							}
+						}
 					}
 				}
 			}

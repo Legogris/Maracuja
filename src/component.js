@@ -15,9 +15,19 @@ var Component = function(MC) {
 		var getID = function() {
 			return my.id;
 		};
+
+		var getAttributes = function(my) {
+			var attrs = creator(my);
+			for(var i in attrs) {
+				var f = attrs[i];
+				if(typeof f === 'function') {
+					f.component = id;
+				}
+			}
+			return attrs;
+		};
 		
 		my.id = id;
-		my.creator = creator;
 		my.requires = [];
 		my.ancestors = [];
 
@@ -38,6 +48,7 @@ var Component = function(MC) {
 			}
 		}
 		this.getID = getID;
+		this.getAttributes = getAttributes;
 	};
 
 	var c = Class(constructor, ['ancestors', 'creator', 'requires']);
