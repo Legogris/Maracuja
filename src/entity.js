@@ -71,12 +71,14 @@ var Entity = function(MC) {
 		var _attach = function(attrs, override) {
 			if(attrs !== undefined) {
 				for(var key in attrs) {
-					if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
-						this.bind(key.substring(2, key.length), attrs[key]);
-					}
-					else {
-						if(override || typeof this[key] === 'undefined') {
-							this[key] = attrs[key];
+					if(attrs.hasOwnProperty(key)) {
+						if(key.substring(0, 2) === 'on') { //Startswith 'on', eg is an event handler.
+							this.bind(key.substring(2, key.length), attrs[key]);
+						}
+						else {
+							if(override || typeof this[key] === 'undefined') {
+								this[key] = attrs[key];
+							}
 						}
 					}
 				}
@@ -168,7 +170,7 @@ var Entity = function(MC) {
 				if(h.length === 1) {
 					h[0].callback.call(h[0].owner, this, eventArgs);
 				} else {
-					for(var i in h) {
+					for(var i = 0, l = h.length; i < l; i++) {
 						h[i].callback.call(h[i].owner, this, eventArgs);
 					}
 				}
@@ -179,7 +181,9 @@ var Entity = function(MC) {
 		var destroy = function() {
 			this.trigger('destroy');
 			for(var eventID in my.handlers) {
-				this.unbind(eventID);
+				if(my.handlers.hasOwnProperty(eventID)) {
+					this.unbind(eventID);
+				}
 			}
 		};
 

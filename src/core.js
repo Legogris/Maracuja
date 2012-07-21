@@ -2,7 +2,6 @@
 var Maracuja = function() {
 	//NS
 	var MC = this;
-	
 	//FIELDS/PROPERTIES
 	var handlers = [];
 	var entities = [];
@@ -118,7 +117,7 @@ var Maracuja = function() {
 			if(h.length === 1) {
 				h[0].callback.call(h[0].owner, MC, eventArgs);
 			} else {
-				for(var i in h) {
+				for(var i = 0, l = h.length; i < l; i++) {
 					h[i].callback.call(h[i].owner, MC, eventArgs);
 				}
 			}

@@ -18,16 +18,20 @@ var Class = function() {
 			var s = function(key) {
 				return function(value) { my[key] = value; };
 			};
-			for(var i in getters) {
-				var key = getters[i];
-				properties[key] = { get: g(key) };
-			}
-			for(var i in setters) {
-				var key = setters[i];
-				if(typeof properties[key] === 'undefined') {
-					properties[key] = {};
+			if(typeof getters !== 'undefined') {
+				for(var i = 0, l = getters.length; i < l; i++) {
+					var key = getters[i];
+					properties[key] = { get: g(key) };
 				}
-				properties[key].set = s(key);
+			}
+			if(typeof setters !== 'undefined') {
+				for(var i = 0, l = setters.length; i < l; i++) {
+					var key = setters[i];
+					if(typeof properties[key] === 'undefined') {
+						properties[key] = {};
+					}
+					properties[key].set = s(key);
+				}
 			}
 			return properties;
 		}; 

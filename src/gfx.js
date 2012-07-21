@@ -91,7 +91,7 @@ var Gfx = function(MC) {
 	**/
 	var update = function(_gameTime) {
 		gameTime = _gameTime;
-		for(var i in redrawEntities) {
+		for(var i = 0, l = redrawEntities.length; i < l; i++) {
 			redrawEntities[i].trigger('draw', {gameTime: gameTime});
 		}
 		redrawEntities = [];

@@ -26,7 +26,7 @@ var Component = function(MC) {
 			if(Object.prototype.toString.apply(ancestorIDs) !== '[object Array]') {
 				ancestorIDs = ancestorIDs.split(' ');
 			}
-			for(var aID in ancestorIDs) {
+			for(var aID = 0, l = ancestorIDs.length; aID < l; aID++) {
 				my.ancestors.push(ancestorIDs[aID]);
 			}
 		}
@@ -34,7 +34,7 @@ var Component = function(MC) {
 			if(Object.prototype.toString.apply(requires) !== '[object Array]') {
 				requires = requires.split(' ');
 			}
-			for(var rID in requires) {
+			for(var rID = 0, l = requires.length; rID < l; rID++) {
 				my.requires.push(requires[rID]);
 			}
 		}
