@@ -54,7 +54,7 @@ ${MC}: ${MODULES} | ${OUT_DIR}
 		> ${MC};
 
 ${DOCS}: ${DOCS_DIR}
-	@@cd ../../dojotoolkit/util/docscripts && php generate.php --outfile=../../../../lego/maracuja/${DOCS_DIR}/api maracuja
+	@@./gendoc.sh
 
 ${SRC_DIR}/selector.js: ${LIB_DIR}/sizzle/sizzle.js
 	@@echo "Building selector code from Sizzle"

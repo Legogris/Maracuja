@@ -1,4 +1,13 @@
-/* Maracuja core */
+/** 
+* Maracuja module
+* @module maracuja
+*/
+/**
+* Maracuja core class.
+* @class MC
+* @static
+* @namespace
+*/
 var Maracuja = function() {
 	//NS
 	var MC = this;
@@ -24,18 +33,12 @@ var Maracuja = function() {
 		};
 	}
 	
-	//FUNCTIONS
-	/**@
-	* #Maracuja.init
-	* @category Core
-	* @sign public void Maracuja.init()
-	* @param sceneID ID of DOM element to use as scene
+	/**
 	* Initializes the Maracuja framework. Needs to be called before anything else.
+	* @method init
+	* @param sceneID ID of DOM element to use as scene
+	* @return {Boolean} Success
 	**/
-	// summary:
-	//	Initializes the Maracuja framework. Needs to be called before anything else.
-	// sceneID: Integer
-	//	 ID of DOM element to use as scene
 	var init = function(sceneID) {
 		var result = true;
 		if(!Gfx.init(sceneID)) {
@@ -61,16 +64,14 @@ var Maracuja = function() {
 		return components[id];
 	};
 
-	/**@
-	* #Maracuja.bind
-	* @category Core
-	* @sign public void Maracuja.bind(eventID, handler)
-	* @param eventID Event to bind to
-	* @param handler Callback to fire when event is triggered.
-	* @param owner Entity associated with callback. optional.
+	/**
 	* Binds a new callback to an event.
 	* Callback gets called when event is triggered.
 	* Callback signature: function(e, sender, eventArgs), where e is this entity, sender is the initiator of triggering and eventArgs is a user-supplied dictionary.
+	* @method bind
+	* @param {String} eventID Event to bind to
+	* @param {Function} handler Callback to fire when event is triggered.
+	* @param {Entity} owner Entity associated with callback. optional.
 	**/
 	var bind = function(eventID, handler, owner) {
 		eventID = eventID.toLowerCase();
@@ -80,13 +81,11 @@ var Maracuja = function() {
 		handlers[eventID].push({owner: owner, callback: handler});
 	};
 
-	/**@
-	* #Maracuja.unbind
-	* @category Core
-	* @sign public void Maracuja.unbind(eventID, handler)
-	* @param eventID Event to unbind
-	* @param handler Callback to unbind.
+	/**
 	* Unbinds a previously bound callback from a global event.
+	* @method unbind
+	* @param {String} eventID Event to unbind
+	* @param {Function} handler Callback to unbind.
 	**/
 	var unbind = function(eventID, handler) {
 		eventID = eventID.toLowerCase();
@@ -102,13 +101,11 @@ var Maracuja = function() {
 		}
 	}
 
-	/**@
-	* #Maracuja.trigger
-	* @category Core
-	* @sign public void Maracuja.trigger(eventID, eventArgs)
-	* @param eventID Event to trigger
-	* @param eventArgs Object with additional data to send to callback.
+	/**
 	* Triggers an event, firing all bound callbacks.
+	* @method trigger
+	* @param {String} eventID Event to trigger
+	* @param {Object} eventArgs Additional data to send to callback.
 	**/
 	var trigger = function(eventID, eventArgs) {
 		eventID = eventID.toLowerCase();
@@ -117,21 +114,27 @@ var Maracuja = function() {
 			if(h.length === 1) {
 				h[0].callback.call(h[0].owner, MC, eventArgs);
 			} else {
-				for(var i = 0, l = h.length; i < l; i++) {
-					h[i].callback.call(h[i].owner, MC, eventArgs);
+				for(var i = 0, l = h.length; i < l; i++) { //See trigger in entity.js for comment
+					try {
+						h[i].callback.call(h[i].owner, MC, eventArgs);
+					} catch(e) {
+						if(console && console.error) {
+							console.error(e);
+						} else {
+							window.setTimeout(function() {throw e}, 0);
+						}
+					}
 				}
 			}
 		}
 		return MC;
 	};
 
-	/**@ 
-	* #Maracuja.update
-	* @category Core
-	* @sign public void Maracuja.update(int timeStamp)
-	* @param timeStamp elapsed milliseconds since epoch. Uses Date.now() if omitted. optional
+	/**
 	* Update method that gets called each frame.
 	* Can also be called manually.
+	* @method update
+	* @param {Number} timeStamp elapsed milliseconds since epoch. Uses Date.now() if omitted. optional
 	**/
 	var update = function(timeStamp) {
 		if(runUpdate) {
@@ -149,32 +152,27 @@ var Maracuja = function() {
 		Gfx.update(gameTime);
 	};
 
-	/**@
-	* #Maracuja.startUpdating
-	* @category Core
-	* @sign public void Maracuja.startUpdating()
+	/**
 	* Starts automatic engine, basically calling update() each frame.
+	* @method startUpdating
 	**/
 	var startUpdating = function() {
 		runUpdate = true;
 		window.requestAnimationFrame(update, Gfx.scene);
 	};
 
-	/**@
-	* #Maracuja.stopUpdating
-	* @category Core
-	* @sign public void Maracuja.stopUpdating()
+	/**
 	* Stops automatic updating.
+	* @method stopUpdating
 	**/
 	var stopUpdating = function() {
 		runUpdate = false;
 	};
 
-	/**@
-	* #Maracuja.getFPS
-	* @category Core, Timing
-	* @sign public void Maracuja.getFPS()
+	/**
 	* Gets the current actual framerate
+	* @method getFPS
+	* @return {Number} Current framerate
 	**/
 	var getFPS = function() {
 		return gameTime.frameCount / gameTime.elapsedTotal * 1000;

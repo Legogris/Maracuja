@@ -1,8 +1,7 @@
-/**@
-* #Class
-* @category Core
+/**
 * @sign public new Class()
 * @return Class
+* @private
 * @param constructor The actual constructor function. First parameter is always an empty object that holds the object's private properties that can be shared between functions. The rest are user-defined.
 * @param getters Array of private properties that should be mapped to a corresponding public property that can be read
 * @param setters Array of private properties that should be mapped to a corresponding public property that can be written
@@ -12,6 +11,8 @@ var Class = function() {
 	return function(constructor, getters, setters) {
 		var getProperties = function(my) {
 			var properties = {};
+			var i;
+			var key;
 			var g = function(key) { 
 				return function() { return my[key]; };
 			};
@@ -20,7 +21,7 @@ var Class = function() {
 			};
 			if(typeof getters !== 'undefined') {
 				for(var i = 0, l = getters.length; i < l; i++) {
-					var key = getters[i];
+					var key = getters[i]; //maybe no var here and below...?
 					properties[key] = { get: g(key) };
 				}
 			}
@@ -33,6 +34,7 @@ var Class = function() {
 					properties[key].set = s(key);
 				}
 			}
+			key = null;
 			return properties;
 		}; 
 		

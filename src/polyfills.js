@@ -1,6 +1,4 @@
-/* requestAnimationFrame polyfill, courtesy of Erik Möller @ Opera */
-
-(function() {
+(function(MC) {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -23,4 +21,4 @@
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
-}());
+})(Maracuja);
