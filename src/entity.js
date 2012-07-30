@@ -57,8 +57,8 @@ var Entity = function(MC) {
 					var com = MC.getComponent(aID);
 					if(this.has(aID)) { //rebind oninit to make it happen before this one
 						var handlers = my.handlers['init'];
-						for(var i in handlers) {
-							var h = handlers[i];
+						for(var j = 0, hl = handlers.length; j < hl; j++) {
+							var h = handlers[j];
 							if(h.callback.component === aID) {
 								this.unbind('init', h.callback);
 								this.bind('init', h.callback);
